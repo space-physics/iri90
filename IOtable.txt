@@ -1,0 +1,34 @@
+C  OUTPUT:  OUTF(1:20,1:1000)
+C               OUTF(1,*)  ELECTRON DENSITY/M-3
+C               OUTF(2,*)  NEUTRAL TEMPERATURE/K
+C               OUTF(3,*)  ION TEMPERATURE/K
+C               OUTF(4,*)  ELECTRON TEMPERATURE/K
+C               OUTF(5,*)  O+ ION DENSITY/% or /M-3 if jf(22)=f
+C               OUTF(6,*)  H+ ION DENSITY/% or /M-3 if jf(22)=f
+C               OUTF(7,*)  HE+ ION DENSITY/% or /M-3 if jf(22)=f
+C               OUTF(8,*)  O2+ ION DENSITY/% or /M-3 if jf(22)=f
+C               OUTF(9,*)  NO+ ION DENSITY/% or /M-3 if jf(22)=f
+C                 AND, IF JF(6)=.FALSE.:
+C               OUTF(10,*)  CLUSTER IONS DEN/% or /M-3 if jf(22)=f
+C               OUTF(11,*)  N+ ION DENSITY/% or /M-3 if jf(22)=f
+C               OUTF(12,*)
+C               OUTF(13,*)
+C  if(jf(24)    OUTF(14,1:11) standard IRI-Ne for 60,65,..,110km
+C     =.false.)        12:22) Friedrich (FIRI) model at these heights
+C                      23:33) standard Danilov (SW=0, WA=0)
+C                      34:44) for minor Stratospheric Warming (SW=0.5)
+C                      45:55) for major Stratospheric Warming (SW=1)
+C                      56:66) weak Winter Anomaly (WA=0.5) conditions
+C                      67:77) strong Winter Anomaly (WA=1) conditions
+C               OUTF(15-20,*)  free
+
+C INPUT:  JF(1:50)      true/false switches for several options
+C         JMAG          =0 geographic   = 1 geomagnetic coordinates
+C         ALATI,ALONG   LATITUDE NORTH AND LONGITUDE EAST IN DEGREES
+C         IYYYY         Year as YYYY, e.g. 1985
+C         MMDD (-DDD)   DATE (OR DAY OF YEAR AS A NEGATIVE NUMBER)
+C         DHOUR         LOCAL TIME (OR UNIVERSAL TIME + 25) IN DECIMAL
+C                          HOURS
+C         HEIBEG,       HEIGHT RANGE IN KM; maximal 100 heights, i.e.
+C          HEIEND,HEISTP        int((heiend-heibeg)/heistp)+1.le.100
+C
