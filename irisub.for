@@ -326,13 +326,14 @@ C*****************************************************************
 c-web-for webversion
 c      CHARACTER FILNAM*53
 
-      Real,intent(out) :: OUTF(20,1000)
+      Real,intent(inout):: OARR(100)
+      Real,intent(out)  :: OUTF(20,1000)
 
       DIMENSION  ARIG(3),RZAR(3),F(3),E(4),XDELS(4),DNDS(4),
      &  FF0(988),XM0(441),F2(13,76,2),FM3(9,49,2),ddens(5,11),
      &  elg(7),FF0N(988),XM0N(441),F2N(13,76,2),FM3N(9,49,2),
      &  INDAP(13),AMP(4),HXL(4),SCL(4),XSM(4),MM(5),DTI(4),AHH(7),
-     &  STTE(6),DTE(5),ATE(7),TEA(6),XNAR(2),param(2),OARR(100),
+     &  STTE(6),DTE(5),ATE(7),TEA(6),XNAR(2),param(2),
      &  DDO(4),DO2(2),DION(7),
      &  osfbr(25),D_MSIS(9),T_MSIS(2),IAPO(7),SWMI(25),ab_mlat(48),
      &  DAT(11,4), PLA(4), PLO(4)
