@@ -4,14 +4,13 @@ Demo of using IRI reference ionosphere in Python
 michael Hirsch
 MIT license
 """
+from __future__ import division,absolute_import
 from numpy import array,arange
 from dateutil.parser import parse
 from pandas import DataFrame
 
 import iri90
-import sys
-sys.path.append('../msise-00')
-from demo_msis import rungtd1d
+from msise00.demo_msis import rungtd1d
 
 def demoiri(dtime,glat=65,glon=-148,f107=100,f107a=100,ap=4):
    jmag=0 #0:geographic 1: magnetic
