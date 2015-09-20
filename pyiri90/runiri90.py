@@ -12,15 +12,11 @@ from os import chdir,getcwd
 #
 import pyiri90
 import iri90 #fortran
-from msise00.runmsis import rungtd1d
-
 
 def runiri(dt,z,glat,glon,f107,f107a,ap,mass=48):
     jmag=0 #0:geographic 1: magnetic
     JF = array((1,1,1,1,0,1,1,1,1,1,1,0)).astype(bool) #Solomon 1993 version of IRI
     #JF = (1,1,1) + (0,0,0) +(1,)*14 + (0,1,0,1,1,1,1,0,0,0,1,1,0,1,0,1,1,1) #for 2013 version of IRI
-#%% call MSIS
-    dens,Tn = rungtd1d(dt,z,glat,glon,f107a,f107,ap,mass,(1,)*25)
 #%% call IRI
     chdir(pyiri90.__path__[0])
     logging.debug(getcwd())
@@ -32,18 +28,18 @@ def runiri(dt,z,glat,glon,f107,f107a,ap,mass=48):
     iono = DataFrame(index=z,
                      columns=['ne','Tn','Ti','Te','nO+','nH+','nHE+','nO2+','nNO+',
                               'nClusterIons','nN+'])
-    iono['ne'] = outf[0,:]/1e6
-    iono['Tn'] = Tn['heretemp']
+    iono['ne'] = outf[0,:]        # ELECTRON DENSITY/M-3
+    iono['Tn'] = outf[1,:]
 
     iono['Ti'] = outf[2,:]
-    i=iono['Ti']<iono['Tn'].values
+    i=(iono['Ti']<iono['Tn']).values
     iono.ix[i,'Ti'] = iono.ix[i,'Tn']
 
     iono['Te'] = outf[3,:]
-    i=iono['Te']<iono['Tn'].values
+    i=(iono['Te']<iono['Tn']).values
     iono.ix[i,'Te'] = iono.ix[i,'Tn']
 
-    iono['nO+']= iono['ne'] * outf[4,:]/100
-    iono['nO2+']= iono['ne'] * outf[7,:]/100
-    iono['nNO+']= iono['ne'] * outf[8,:]/100
+    iono['nO+']= iono['ne'] * outf[4,:]/100 #glow
+    iono['nO2+']= iono['ne'] * outf[7,:]/100 #glow
+    iono['nNO+']= iono['ne'] * outf[8,:]/100 #glow
     return iono,oarr
