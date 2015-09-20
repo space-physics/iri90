@@ -159,20 +159,21 @@ C
      &                  ZKM,NZ,drect,OUTF,OARR)
 
       logical, intent(in) :: JF(12)
-      integer,intent(in) :: JMAG
+      integer,intent(in) :: JMAG,MMDD
+      real,intent(in) :: alati,along,rz12
       real,intent(out) :: outf(11,nz),oarr(30)
 
       dimension zkm(nz)
       character*(*) drect
       character*50 path
       character*10 filename
-      INTEGER               EGNR,AGNR,DAYNR,DDO,DO2,SEASON,SEADAY
+      INTEGER               DAYNR,DDO,DO2,SEASON,SEADAY
       REAL               LATI,LONGI,MO2,MO,MODIP,NMF2,MAGBR
-      REAL                NMF1,NME,NMD,NEI,MM,MLAT,MLONG,NOBO2
+      REAL                NMF1,NME,NMD,MM,MLAT,MLONG,NOBO2
       DIMENSION  F(3),RIF(4),E(4),XDELS(4),DNDS(4)
       DIMENSION  FF0(988),XM0(441),F2(13,76,2),FM3(9,49,2)
       DIMENSION  AMP(4),HXL(4),SCL(4),B0B1(5)
-      DIMENSION  CTN(3),CTNN(3),XSM(4),MM(5),DTI(4)
+      DIMENSION  XSM(4),MM(5),DTI(4)
       DIMENSION  AHH(7),STTE(6),DTE(5),ATE(7),TEA(6),HOA(3),XNAR(3)
       DIMENSION  PG1O(80),PG2O(32),PG3O(80),PF1O(12),PF2O(4),PF3O(12)
       DIMENSION  HO(4),MO(5),DDO(4),HO2(2),MO2(3),DO2(2),DION(7)
@@ -194,12 +195,12 @@ C
      &      B0B1  /.755566,.778596,.797332,.812928,.826146/
       data icalls/0/
 C
-      SAVE EGNR,AGNR,DAYNR,DO2,SEASON,SEADAY,LATI,LONGI,MO2,
-     &     MODIP,MAGBR,NMF1,NEI,MLAT,MLONG,NOBO2,
+      SAVE DAYNR,DO2,SEASON,SEADAY,LATI,LONGI,MO2,
+     &     MODIP,MAGBR,NMF1,MLAT,MLONG,NOBO2,
      &     F,RIF,FF0,XM0,F2,FM3,AMP,HXL,SCL,
-     &     CTN,CTNN,ATE,TEA,HOA,XNAR,PG1O,
+     &     ATE,TEA,HOA,XNAR,PG1O,
      &     PG2O,PG3O,PF1O,PF2O,PF3O,HO,MO,DDO,HO2,DION,EXT,
-     &     SCHALT,SSIN,TCON,F1REG,FOF2IN,HMF2IN,URSIF2,LAYVER,
+     &     SCHALT,TCON,F1REG,FOF2IN,HMF2IN,URSIF2,LAYVER,
      &     DY,GULB0,NODEN,NOTEM,NOION,TENEOP,OLD79,TOPSI,BOTTO,BELOWE,
      &     URSIFO,MONTH,MONTHO,RG,RGO
 C
@@ -280,7 +281,7 @@ C
            ENDIF
 
       if(icalls.gt.1) goto 8201
-       write(konsol,*) '*** IRI parameters are being calculated ***'
+!       write(konsol,*) '*** IRI parameters are being calculated ***'
       if(NODEN) goto 2889
        if(LAYVER) write(konsol,*) 'Ne, E-F: The LAY-Version is ',
      &         'prelimenary. Erroneous profile features can occur.'
@@ -294,9 +295,9 @@ C
          goto 2889
          endif
        if(URSIF2) then
-         write(konsol,*) 'Ne, foF2: URSI model is used.'
+         write(konsol,*) 'IRI90: Ne, foF2 - URSI model is used.'
        else
-         write(konsol,*) 'Ne, foF2: CCIR model is used.'
+         write(konsol,*) 'IRI90: Ne, foF2 - CCIR model is used.'
        endif
 2889  if((.not.NOION).and.(DY))
      &        write(konsol,*) 'Ion Com.: Using Danilov-Yaichnikov-1985.'
@@ -556,9 +557,9 @@ C!!!!!!!D-REGION PARAMETER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       X=HME-HDX
       XKK=-DXDX*X/(XDX*ALOG(XDX/NME))
       D1=DXDX/(XDX*XKK*X**(XKK-1.0))
-C
-C SEARCH FOR HMF1 ..................................................
-C
+!
+! SEARCH FOR HMF1 ..................................................
+!
 2726       IF(.not.BOTTO) GOTO 4933
        if(LAYVER) goto 6153
 924       IF(.not.F1REG) GOTO 380
@@ -684,15 +685,15 @@ C---------- CALCULATION OF NEUTRAL TEMPERATURE PARAMETER-------
         ENDIF
       TLBDH=TEXOS-TN120
       TLBDN=TEXNI-TN1NI
-C
-C--------- CALCULATION OF ELECTRON TEMPERATURE PARAMETER--------
-C
-881   CONTINUE
 
-C !!!!!!!!!! TE(120KM)=TN(120KM) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!--------- CALCULATION OF ELECTRON TEMPERATURE PARAMETER--------
+
+      CONTINUE
+
+!!!!!!!!!! TE(120KM)=TN(120KM) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       ATE(1)=TN120
 
-C !!!!!!!!!! TE-MAXIMUM (JICAMARCA,ARECIBO) !!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!! TE-MAXIMUM (JICAMARCA,ARECIBO) !!!!!!!!!!!!!!!!!!!!
       HMAXD=60.*EXP(-(MLAT/22.41)**2)+210.
       HMAXN=150.
       AHH(2)=HPOL(HOUR,HMAXD,HMAXN,SAX,SUX,1.,1.)
@@ -700,8 +701,8 @@ C !!!!!!!!!! TE-MAXIMUM (JICAMARCA,ARECIBO) !!!!!!!!!!!!!!!!!!!!
       TMAXN=TN(HMAXN,TEXNI,TLBDN,SIGNI)+20
       ATE(2)=HPOL(HOUR,TMAXD,TMAXN,SAX,SUX,1.,1.)
 
-C !!!!!!!!!! TE(300,400KM)=TE-AE-C !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-C !!!!!!!!!! TE(1400,3000KM)=TE-ISIS !!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!! TE(300,400KM)=TE-AE-C !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!! TE(1400,3000KM)=TE-ISIS !!!!!!!!!!!!!!!!!!!!!!!!!!!
        DIPLAT=MAGBR
       CALL TEBA(DIPLAT,HOUR,NSESON,TEA)
       ATE(3)=TEA(1)
@@ -737,7 +738,7 @@ C !!!!!!!!!! CORRECTED REGION BOUNDARIES !!!!!!!!!!!!!!!!!!!!!!
       DO 1902 I=1,6
 1902  STTE(I)=(ATE(I+1)-ATE(I))/(AHH(I+1)-AHH(I))
       ATE1=ATE(1)
-887   CONTINUE
+      CONTINUE
 C
 C------------ CALCULATION OF ION TEMPERATURE PARAMETERS--------
 C
@@ -774,12 +775,12 @@ C !!!!!!!!!! TANGENT ON TN DETERMINES HS !!!!!!!!!!!!!!!!!!!!!!
       CALL REGFA1(130.0,500.0,TI13,TI50,0.01,TI1,TEDER,SCHALT,HS)
       IF(SCHALT) HS=200.
       TNHS=TN(HS,TEXOS,TLBDH,SIGMA)
-      MM(1)=DTNDH(HS,TEXOS,TLBDH,SIGMA)
+      MM(1)=DTNDH(HS,  TLBDH,SIGMA)
       IF(SCHALT) MM(1)=(TI1-TNHS)/(XSM1-HS)
       MXSM=2
 
 C !!!!!!!!!! XTETI ALTITTUDE WHERE TE=TI !!!!!!!!!!!!!!!!!!!!!!
-2391    XTTS=500.
+        XTTS=500.
         X=500.
 2390    X=X+XTTS
         IF(X.GE.AHH(7)) GOTO 240
@@ -931,7 +932,7 @@ C
 
       do 7118 kk=1,nz
       height=zkm(kk)
-300   IF(NODEN) GOTO 330
+      IF(NODEN) GOTO 330
       IF((HEIGHT.GT.HNEE).OR.(HEIGHT.LT.HNEA)) GOTO 330
        IF(LAYVER) THEN
          ELEDE=-9.
@@ -1012,14 +1013,12 @@ C
       OARR(26)=MAGBR
       OARR(27)=MODIP
 
-3330  CONTINUE
-      RETURN
-      END
+      END SUBROUTINE IRI90
 C
 C
 C Subroutine DFP, Stan Solomon, 3/92, splices filename to drectory
 C
-      subroutine dfp(drect,filename,path)
+      Subroutine dfp(drect,filename,path)
       character*(*) drect,filename,path
       character*50 blanks
       data blanks/'                                                  '/
@@ -1040,8 +1039,8 @@ C
         path(1:nd)=drect(lb:le)
         path(nd+1:nd+10)=filename(1:10)
       endif
-      return
-      end
+
+      end Subroutine dfp
 C
 C
 C
@@ -1183,8 +1182,8 @@ C ELECTRON DENSITY FOR THE E AND VALLEY REGION (HME..HEF).
       XE5=XNME*(1+T1)
       RETURN
 100   XE5=XNME*EXP(T1)
-      RETURN
-      END
+
+      END FUNCTION XE5
 C
 C
       REAL FUNCTION XE6(H)
@@ -1200,8 +1199,8 @@ C ELECTRON DENSITY FOR THE D REGION (HA...HME).
       RETURN
 100   Z=HME-H
       XE6=XNME*EXP(-D1*Z**XKK)
-      RETURN
-      END
+
+      END FUNCTION XE6
 C
 C
       REAL FUNCTION XE(H)
@@ -1422,8 +1421,8 @@ C EXPANSION THAT WAS USED FOR THE BRACE-THEIS-MODELS.
       C(K-N)=C(K-N)*SAZ
 18    K=K+1
 20    CONTINUE
-      RETURN
-      END
+
+      END SUBROUTINE SPHARM
 C
 C
       REAL FUNCTION ELTE(H)
@@ -1435,17 +1434,22 @@ C EXP-FUNCTION.
 c----------------------------------------------------------------
       COMMON /BLOTE/AH(7),ATE1,ST(6),D(5)
 C
-      SUM=ATE1+ST(1)*(H-AH(1))
+      SUMM=ATE1+ST(1)*(H-AH(1))
       DO 1 I=1,5
        aa = eptr(h    ,d(i),ah(i+1))
        bb = eptr(ah(1),d(i),ah(i+1))
-1     SUM=SUM+(ST(I+1)-ST(I))*(AA-BB)*D(I)
-      ELTE=SUM
-      RETURN
-      END
+1     SUMM=SUMM+(ST(I+1)-ST(I))*(AA-BB)*D(I)
+      ELTE=SUMM
+
+      END FUNCTION ELTE
 C
 C
-      FUNCTION TEDE(H,DEN,COV)
+      Pure Real FUNCTION TEDE(H,DEN,COV)
+      Implicit None
+
+      Real,Intent(In) :: h,den,cov
+
+      Real y,acov,yc
 C ELECTRON TEMEPERATURE MODEL AFTER BRACE,THEIS .
 C FOR NEG. COV THE MEAN COV-INDEX (3 SOLAR ROT.) IS EXPECTED.
 C DEN IS THE ELECTRON DENSITY IN M-3.
@@ -1456,8 +1460,8 @@ C DEN IS THE ELECTRON DENSITY IN M-3.
       IF(COV.LT.0.)
      &YC=1.+(.123+1.69E-3*ACOV)/(1.+EXP(-(ACOV-115.)/10.))
       TEDE=Y*YC
-      RETURN
-      END
+
+      END FUNCTION TEDE
 C
 C
 C*************************************************************
@@ -1473,25 +1477,31 @@ c----------------------------------------------------------------
       REAL               MM
       COMMON  /BLOCK8/  HS,TNHS,XSM(4),MM(5),G(4),M
 
-      SUM=MM(1)*(H-HS)+TNHS
+      SUMM=MM(1)*(H-HS)+TNHS
       DO 100 I=1,M-1
        aa = eptr(h ,g(i),xsm(i))
        bb = eptr(hs,g(i),xsm(i))
-100          SUM=SUM+(MM(I+1)-MM(I))*(AA-BB)*G(I)
-      TI=SUM
-      RETURN
-      END
+100          SUMM=SUMM+(MM(I+1)-MM(I))*(AA-BB)*G(I)
+      TI=SUMM
+
+      END FUNCTION TI
 C
 C
       REAL FUNCTION TEDER(H)
+      Implicit None
+
+      Real,Intent(In) :: H
+
+      Real,External :: TN,DTNDH
+      Real XSM1,TEX,TLBD,SIG,dtdx,tnh
 C THIS FUNCTION ALONG WITH PROCEDURE REGFA1 ALLOWS TO FIND
 C THE  HEIGHT ABOVE WHICH TN BEGINS TO BE DIFFERENT FROM TI
       COMMON       /BLOTN/XSM1,TEX,TLBD,SIG
       TNH = TN(H,TEX,TLBD,SIG)
-      DTDX = DTNDH(H,TEX,TLBD,SIG)
+      DTDX = DTNDH(H,TLBD,SIG)
       TEDER = DTDX * ( XSM1 - H ) + TNH
-      RETURN
-      END
+
+      END FUNCTION TEDER
 C
 C
 C*************************************************************
@@ -1500,6 +1510,7 @@ C*************************************************************
 C
 C
       REAL FUNCTION RPID (H, H0, N0, M, ST, ID, XS)
+      Implicit None
 c------------------------------------------------------------------
 C D.BILITZA,1977,THIS ANALYTIC FUNCTION IS USED TO REPRESENT THE
 C RELATIVE PRECENTAGE DENSITY OF ATOMAR AND MOLECULAR OXYGEN IONS.
@@ -1508,19 +1519,24 @@ C STEP-FUNCTIONS AT THE STEP HEIGHTS XS(M) WITH TRANSITION
 C THICKNESSES ID(M). RPID(H0,H0,N0,....)=N0.
 C ARGMAX is the highest allowed argument for EXP in your system.
 c------------------------------------------------------------------
-      REAL               N0
-      DIMENSION        ID(4), ST(5), XS(4)
+      Real, Intent(In) :: H,H0,n0, ST(*),XS(*)
+      Integer, Intent(In) :: M,ID(*)
+
+      Real,External :: eptr
+      Real aa,bb,xi,summ,sm,argmax
+      integer i
+
       COMMON  /ARGEXP/       ARGMAX
 
-      SUM=(H-H0)*ST(1)
+      SUMM=(H-H0)*ST(1)
       DO 100  I=1,M
              XI=ID(I)
               aa = eptr(h ,xi,xs(i))
               bb = eptr(h0,xi,xs(i))
-100             SUM=SUM+(ST(I+1)-ST(I))*(AA-BB)*XI
-      IF(ABS(SUM).LT.ARGMAX) then
-       SM=EXP(SUM)
-      else IF(SUM.Gt.0.0) then
+100             SUMM=SUMM+(ST(I+1)-ST(I))*(AA-BB)*XI
+      IF(ABS(SUMM).LT.ARGMAX) then
+       SM=EXP(SUMM)
+      else IF(SUMM.Gt.0.0) then
        SM=EXP(ARGMAX)
       else
        SM=0.0
@@ -1629,11 +1645,18 @@ C CHOSEN AS TO APPROACH DANILOV-SEMENOV'S COMPILATION.
 C
 C
       SUBROUTINE SUFE (FIELD,RFE,M,FE)
+      Implicit None
 C SELECTS THE REQUIRED ION DENSITY PARAMETER SET.
 C THE INPUT FIELD INCLUDES DIFFERENT SETS OF DIMENSION M EACH
 C CARACTERISED BY 4 HEADER NUMBERS. RFE(4) SHOULD CONTAIN THE
 C CHOSEN HEADER NUMBERS.FE(M) IS THE CORRESPONDING SET.
-      DIMENSION RFE(4),FE(12),FIELD(80),EFE(4)
+      Real,Intent(out) :: FE(*)
+      Real,Intent(In)  :: field(*),rfe(*)
+      integer,Intent(In):: M
+
+      Real EFE(4)
+      Integer K,I
+
       K=0
 100   DO 101 I=1,4
       K=K+1
@@ -1644,8 +1667,8 @@ C CHOSEN HEADER NUMBERS.FE(M) IS THE CORRESPONDING SET.
       DO 120 I=1,4
       IF((EFE(I).GT.-10.0).AND.(RFE(I).NE.EFE(I))) GOTO 100
 120   CONTINUE
-      RETURN
-      END
+
+      END Subroutine SUFE
 C
 C
 C*************************************************************
@@ -1790,7 +1813,7 @@ C NQ(K1) IS AN INTEGER ARRAY GIVING THE HIGHEST DEGREES IN
 C LATITUDE FOR EACH LONGITUDE HARMONIC.
 C M=1+NQ1+2(NQ2+1)+2(NQ3+1)+... .
 C SHEIKH,4.3.77.
-      REAL*8 C(12),S(12),COEF(100),SUM
+      REAL*8 C(12),S(12),COEF(100),SUMM
       DIMENSION NQ(K1),XSINX(13),SFE(M3)
       COMMON/CONST/UMR
       HOU=(15.0*HOUR-180.0)*UMR
@@ -1806,13 +1829,13 @@ C SHEIKH,4.3.77.
       DO 300 J=1,IHARM
       COEF(I)=COEF(I)+SFE(MI+2*J)*S(J)+SFE(MI+2*J+1)*C(J)
 300   CONTINUE
-      SUM=COEF(1)
+      SUMM=COEF(1)
       SS=SIN(SMODIP*UMR)
       S3=SS
       XSINX(1)=1.0
-      INDEX=NQ(1)
-      DO 350 J=1,INDEX
-      SUM=SUM+COEF(1+J)*SS
+      INDX=NQ(1)
+      DO 350 J=1,INDX
+      SUMM=SUMM+COEF(1+J)*SS
       XSINX(J+1)=SS
       SS=SS*S3
 350   CONTINUE
@@ -1824,18 +1847,18 @@ C SHEIKH,4.3.77.
       S0=SLONG*(J-1.)*UMR
       S1=COS(S0)
       S2=SIN(S0)
-      INDEX=NQ(J)+1
-      DO 450 L=1,INDEX
+      INDX=NQ(J)+1
+      DO 450 L=1,INDX
       NP=NP+1
-      SUM=SUM+COEF(NP)*XSINX(L)*SS*S1
+      SUMM=SUMM+COEF(NP)*XSINX(L)*SS*S1
       NP=NP+1
-      SUM=SUM+COEF(NP)*XSINX(L)*SS*S2
+      SUMM=SUMM+COEF(NP)*XSINX(L)*SS*S2
 450   CONTINUE
       SS=SS*S3
 400   CONTINUE
-      GAMMA1=SUM
-      RETURN
-      END
+      GAMMA1=real(SUMM)
+
+      END FUNCTION GAMMA1
 C
 C
 C************************************************************
@@ -1981,7 +2004,7 @@ C SHEIK,1977.
 500   H(IL+2)=G(IL+2)+Z1*H(IH+2)+X1*H(IH+4)-Y1*(H(IH+3)+H(IH))
       H(IL+1)=G(IL+1)+Z1*H(IH+1)+Y1*H(IH+4)+X1*(H(IH+3)-H(IH))
 400   H(IL)=G(IL)+Z1*H(IH)+2.0*(X1*H(IH+1)+Y1*H(IH+2))
-700   IH=IL
+      IH=IL
       IF(I.GE.K) GOTO 300
 200   CONTINUE
       S=0.5*H(1)+2.0*(H(2)*XI(3)+H(3)*XI(1)+H(4)*XI(2))
@@ -2306,11 +2329,13 @@ C ------------------------------------------------------------ dLAY/dX
        END
 C
 C
-       REAL FUNCTION D2LAY ( X, XM, SC, HX )
+       REAL FUNCTION D2LAY ( X, SC, HX )
+       Implicit None
+       Real,Intent(In) :: X,SC,HX
+       Real,External :: Epla
 C ---------------------------------------------------------- d2LAY/dX2
        D2LAY = EPLA(X,SC,HX) /  (SC * SC)
-       RETURN
-       END
+       END FUNCTION D2LAY
 C
 C
        REAL FUNCTION EPTR ( X, SC, HX )
@@ -2352,7 +2377,10 @@ C---------------------------------------------- STEP FROM Y1 TO Y2
        END
 C
 C
-       REAL FUNCTION EPLA ( X, SC, HX )
+       Pure REAL FUNCTION EPLA ( X, SC, HX )
+       Implicit None
+       Real,Intent(In) :: X,SC,HX
+       Real Argmax,d1,d0,d2
 C ------------------------------------------------------------ PEAK
        COMMON/ARGEXP/ARGMAX
        D1 = ( X - HX ) / SC
@@ -2362,8 +2390,8 @@ C ------------------------------------------------------------ PEAK
 1       D0 = EXP ( D1 )
        D2 = 1. + D0
        EPLA = D0 / ( D2 * D2 )
-       RETURN
-       END
+
+       END FUNCTION EPLA
 c
 c
        FUNCTION XE2TO5(H,HMF2,NL,HX,SC,AMP)
@@ -2550,7 +2578,7 @@ C
               DO 4 K=M0+1,M01
 4                     XLI(I,K) = D1LAY( X(K), HM, SC(I), HX(I) )
               DO 5 K=M01+1,M
-5                     XLI(I,K) = D2LAY( X(K), HM, SC(I), HX(I) )
+5                     XLI(I,K) = D2LAY( X(K),     SC(I), HX(I) )
 2       CONTINUE
               DO 7 J=1,N
               DO 6 K=1,M
@@ -2717,6 +2745,8 @@ C
 c
 c
        subroutine ioncom(h,z,f,fs,t,cn)
+
+       integer,intent(in) :: t
 c---------------------------------------------------------------
 c ion composition model
 c A.D. Danilov and A.P. Yaichnikov, A New Model of the Ion
@@ -2777,7 +2807,7 @@ c
          do 7 j=1,6
               var(j) = p(1,j,i)*cos(z) + p(2,j,i)*cos(f) +
      &                 p(3,j,i)*cos(0.013*(300.-fs)) +
-     &                      p(4,j,i)*cos(0.52*(t-6.)) + p(5,j,i)
+     &                      p(4,j,i)*cos(0.52*(real(t)-6.)) + p(5,j,i)
 7         continue
          cm(i)  = var(1)
          hm(i)  = var(2)
@@ -2799,8 +2829,8 @@ c
 5       continue
        do 6 i=1,7
 6              cn(i)=cn(i)/s*100.
-       return
-       end
+
+       end subroutine ioncom
 C
 C
 C
@@ -2964,22 +2994,32 @@ C  Sigma      [Eq. A5]
       END
 C
 C
-      FUNCTION TN(H,TINF,TLBD,S)
+      pure real FUNCTION TN(H,TINF,TLBD,S)
+      implicit none
+
+      Real,intent(in) :: h,tinf,tlbd,s
+
+      Real zg2
 C--------------------------------------------------------------------
 C       Calculate Temperature for MSIS/CIRA-86 model
 C--------------------------------------------------------------------
       ZG2 = ( H - 120. ) * 6476.77 / ( 6356.77 + H )
       TN = TINF - TLBD * EXP ( - S * ZG2 )
-      RETURN
-      END
+
+      END function TN
 C
 C
-      FUNCTION DTNDH(H,TINF,TLBD,S)
+      pure real FUNCTION DTNDH(H,TLBD,S)
+      implicit None
+
+      Real,Intent(In) :: h,tlbd,s
+
+      Real zg1,zg2,zg3
 C---------------------------------------------------------------------
       ZG1 = 6356.77 + H
       ZG2 = 6476.77 / ZG1
       ZG3 = ( H - 120. ) * ZG2
       DTNDH = - TLBD * EXP ( - S * ZG3 ) * ( S / ZG1 * ( ZG3 - ZG2 ) )
-      RETURN
-      END
+
+      END FUNCTION DTNDH
 
