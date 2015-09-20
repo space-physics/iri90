@@ -26,20 +26,25 @@ def runiri(dt,z,glat,glon,f107,f107a,ap,mass=48):
                        z,'data/')
 #%% arrange output
     iono = DataFrame(index=z,
-                     columns=['ne','Tn','Ti','Te','nO+','nH+','nHE+','nO2+','nNO+',
+                     columns=['ne','Tn','Ti','Te','nO+','nH+','nHe+','nO2+','nNO+',
                               'nClusterIons','nN+'])
-    iono['ne'] = outf[0,:]        # ELECTRON DENSITY/M-3
-    iono['Tn'] = outf[1,:]
+    iono['ne'] = outf[0,:]  # ELECTRON DENSITY/M-3
+    iono['Tn'] = outf[1,:]  # NEUTRAL TEMPERATURE/K
 
-    iono['Ti'] = outf[2,:]
-    i=(iono['Ti']<iono['Tn']).values
-    iono.ix[i,'Ti'] = iono.ix[i,'Tn']
+    iono['Ti'] = outf[2,:]  # ION TEMPERATURE/K
+#    i=(iono['Ti']<iono['Tn']).values
+#    iono.ix[i,'Ti'] = iono.ix[i,'Tn']
 
-    iono['Te'] = outf[3,:]
-    i=(iono['Te']<iono['Tn']).values
-    iono.ix[i,'Te'] = iono.ix[i,'Tn']
+    iono['Te'] = outf[3,:]  # ELECTRON TEMPERATURE/K
+#    i=(iono['Te']<iono['Tn']).values
+#    iono.ix[i,'Te'] = iono.ix[i,'Tn']
 
-    iono['nO+']= iono['ne'] * outf[4,:]/100 #glow
-    iono['nO2+']= iono['ne'] * outf[7,:]/100 #glow
-    iono['nNO+']= iono['ne'] * outf[8,:]/100 #glow
+#   iri90 outputs percentage of Ne
+    iono['nO+'] = iono['ne'] * outf[4,:]/100. #O+ ion density / M-3
+    iono['nH+'] = iono['ne'] * outf[5,:]/100. #H+ ion density / M-3
+    iono['nHe+']= iono['ne'] * outf[6,:]/100. #He+ ion density / M-3
+    iono['nO2+']= iono['ne'] * outf[7,:]/100. #O2+ "" "" ""
+    iono['nNO+']= iono['ne'] * outf[8,:]/100. #NO+ "" "" ""
+    iono['nClusterIons'] = iono['ne'] * outf[9,:]/100.
+    iono['nN+'] = iono['ne'] * outf[10,:]/100.
     return iono,oarr
