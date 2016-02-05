@@ -16,10 +16,14 @@ Installation
 
 .. code:: bash
 
-    git clone --depth 1 --recursive https://github.com/scienceopen/pyiri90
-    pip install -r requirements.txt
-    make -f Makefile.f2py
+    python setup.py develop
 
+
+Example
+=======
+::
+
+	python DemoIRI90.py
 
 
 References
