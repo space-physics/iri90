@@ -15,7 +15,7 @@ import iri90 #fortran
 
 def runiri(dt,z,glat,glon,f107,f107a,ap,mass=48):
     jmag=0 #0:geographic 1: magnetic
-    JF = array((1,1,1,1,0,1,1,1,1,1,1,0)).astype(bool) #Solomon 1993 version of IRI
+    JF = array((1,1,1,1,0,1,1,1,1,1,1,0),bool) #Solomon 1993 version of IRI
     #JF = (1,1,1) + (0,0,0) +(1,)*14 + (0,1,0,1,1,1,1,0,0,0,1,1,0,1,0,1,1,1) #for 2013 version of IRI
 #%% call IRI
     chdir(pyiri90.__path__[0])
