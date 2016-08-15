@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 Demo of using IRI reference ionosphere in Python
 michael Hirsch
