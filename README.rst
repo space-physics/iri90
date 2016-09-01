@@ -1,5 +1,3 @@
-.. image::https://codeclimate.com/github/scienceopen/pyiri90/badges/gpa.svg
-   :targer: https://codeclimate.com/github/scienceopen/pyiri90
 
 =============
 iri90-python
