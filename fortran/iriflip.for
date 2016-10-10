@@ -575,7 +575,7 @@ C.......o+(2d)
       PR(2)=OP2P*NE*RTS(13)
       PR(3)=OP2P*0.171
       PR(4)=HEPLUS*O2N*RTS(76)     !..Fox
-    PR(5)=PSEC
+      PR(5)=PSEC
       LR(1)=RTS(19)*N2N
       LR(2)=7.7E-5                 !.. radiation at 3726 and 3729 A
       LR(3)=NE*RTS(12)
