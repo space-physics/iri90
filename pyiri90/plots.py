@@ -39,7 +39,7 @@ def sweep(iono,fs,B0,latlon,dtime):
         wp,wH,hr[i] = plasmaprop(iono,f,B0)
 
     ax = figure().gca()
-    ax.plot(fs, hr)
-    ax.set_xlabel('frequency [Hz]')
+    ax.plot(fs/1e6, hr)
+    ax.set_xlabel('frequency [MHz]')
     ax.set_ylabel('altitude [km]')
     ax.set_title('Reflection Height: first order approx. $\omega_p = \omega$')
