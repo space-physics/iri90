@@ -3,10 +3,14 @@ IRI-90 international reference ionosphere in Python
 """
 from __future__ import division,absolute_import
 import logging
-from numpy import array
+from numpy import array,pi,sqrt
 from pandas import DataFrame
 #
 import iri90 #fortran
+
+e = 1.6021766208e-19 # electron charge, coulomb
+me = 9.10938356e-31 # electron mass, kg
+eps0 = 8.85418782e-12 # permittivity of free space m^-3 kg^-1 s^4 A^2
 
 def runiri(dt,z,glatlon,f107,f107a,ap):
     glat,glon = glatlon
@@ -44,3 +48,20 @@ def runiri(dt,z,glatlon,f107,f107a,ap):
     iono['nClusterIons'] = iono['ne'] * outf[9,:]/100.
     iono['nN+'] = iono['ne'] * outf[10,:]/100.
     return iono
+
+def plasmaprop(iono,f,B0):
+    Ne = iono['ne'].values.astype(float)
+    zkm = iono.index.values
+    w = 2*pi*f
+
+    wp = sqrt(Ne*e**2/(eps0*me)) # electron plasma frequency [rad/sec]
+    wH = B0*e/me               # electron gyrofrequency [rad/sec]
+
+
+    if (w <= wp).any(): # else reflection doesn't occur, passes right through (radar freq > MUF)
+        reflectionheight = zkm[abs(w-wp).argmin()]
+    else:
+        logging.warning('radar freq {:.1f} MHz  >  max. plasma freq {:.1f} MHz: no reflection'.format(f/1e6,wp.max()/(2*pi)/1e6))
+        reflectionheight = None
+
+    return wp,wH,reflectionheight
