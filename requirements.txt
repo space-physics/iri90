@@ -1,0 +1,4 @@
+nose
+numpy
+pandas
+matplotlib
