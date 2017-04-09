@@ -955,7 +955,8 @@ C
 7108  IF(NOION) GOTO 7118
       IF((HEIGHT.GT.HNIE).OR.(HEIGHT.LT.HNIA)) GOTO 7118
        if(DY) then
-      call IONCOM(HEIGHT,XHI*UMR,LATI*UMR,COV,MONTH,DION)
+      zmonth = month + iday / 30.0
+      call IONCOM(HEIGHT,XHI*UMR,LATI*UMR,COV,ZMONTH,DION)
       ROX=DION(1)
       RHX=DION(2)
       RNX=DION(3)
@@ -1644,7 +1645,7 @@ C CHOSEN AS TO APPROACH DANILOV-SEMENOV'S COMPILATION.
       END
 C
 C
-      SUBROUTINE SUFE (FIELD,RFE,M,FE)
+      Pure SUBROUTINE SUFE (FIELD,RFE,M,FE)
       Implicit None
 C SELECTS THE REQUIRED ION DENSITY PARAMETER SET.
 C THE INPUT FIELD INCLUDES DIFFERENT SETS OF DIMENSION M EACH
@@ -2371,10 +2372,13 @@ C -------------------------------------------------------------- STEP
 C
 C
        REAL FUNCTION EPSTEP ( Y2, Y1, SC, HX, X)
+       Implicit None
+       Real, Intent(In) :: Y2,Y1,SC,HX,X
+       Real,External :: EpsT
 C---------------------------------------------- STEP FROM Y1 TO Y2
        EPSTEP = Y1 + ( Y2 - Y1 ) * EPST ( X, SC, HX)
-       RETURN
-       END
+
+       END Function EPSTEP
 C
 C
        Pure REAL FUNCTION EPLA ( X, SC, HX )
@@ -2454,7 +2458,12 @@ C
        END
 C
 C
-       SUBROUTINE ROGUL(IDAY,XHI,SX,GRO)
+       Pure SUBROUTINE ROGUL(IDAY,XHI,SX,GRO)
+       Implicit None
+       Integer, Intent(In) :: IDAY
+       Real, Intent(In)    :: XHI
+       Real, Intent(Out)   :: SX, GRO
+       Real XS
 C ---------------------------------------------------------------------
 C   CALCULATES RATIO H0.5/HMF2 FOR HALF-DENSITY POINT (NE(H0.5)=0.5*NMF2)
 C   T.L. GULYAEVA, ADVANCES IN SPACE RESEARCH 7, #6, 39-48, 1987.
@@ -2471,8 +2480,8 @@ C
        XS = ( XHI - 20. * SX) / 15.
        GRO = 0.8 - 0.2 / ( 1. + EXP(XS) )
 c same as gro=0.6+0.2/(1+exp(-xs))
-       RETURN
-       END
+
+       END Subroutine Rogul
 C
 C
        SUBROUTINE LNGLSN ( N, A, B, AUS)

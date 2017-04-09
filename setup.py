@@ -4,7 +4,7 @@ from numpy.distutils.core import setup,Extension
 from glob import glob
 from os.path import join
 
-req = ['nose','numpy','pandas','matplotlib']
+req = ['nose','numpy','xarray','matplotlib']
 
 #%% fortran data files
 iridata = glob(join('data','*.asc'))
