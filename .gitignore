@@ -1,3 +1,9 @@
+CMakeFiles/
+CMakeCache.txt
+testiri90
+Makefile
+*.cmake
+
 *.svg
 bin/
 # Byte-compiled / optimized / DLL files
