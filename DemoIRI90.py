@@ -5,7 +5,7 @@ from matplotlib.pyplot import show
 import seaborn as sns
 #
 from pyiri90 import runiri,plasmaprop
-from pyiri90.plots import summary,sweep
+from pyiri90.plots import summary,sweep,plotiono
 
 f0 = 3.5e6 # radar frequency [Hz]
 B0 = 60e-6 # Geomagnetic field strength [Tesla] #TODO verify at altitude
@@ -31,6 +31,9 @@ if __name__ == '__main__':
 #%%
     wp,wH,reflectionheight = plasmaprop(iono,f0,B0)
 #%% plots
+
+    plotiono(iono,dtime,p.latlon,p.f107,p.f107a,p.ap)
+
     summary(iono,reflectionheight,f0,p.latlon,dtime)
 
     sweep(iono,fs,B0,p.latlon,dtime)

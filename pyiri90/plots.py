@@ -4,12 +4,18 @@ from numpy import zeros
 #
 from . import plasmaprop
 
-def plotiono(iono:DataArray):
+def plotiono(iono:DataArray,dtime,latlon,f107,f107a,ap):
     assert isinstance(iono,DataArray)
 
     ax = figure().gca()
     for p in iono.sim:
-        ax.plot()
+        ax.semilogx(iono.loc[:,p],iono.alt_km,label=p.values)
+
+    ax.set_xlim(1e1,None)
+    ax.legend()
+    ax.set_xlabel('density [m^-3]')
+    ax.set_ylabel('altitude [km]')
+    ax.set_title(f"IRI90 simulation  {latlon} {dtime} f10.7={f107} f107avg={f107a} Ap={ap}")
 
 def summary(iono:DataArray,reflectionheight,f0,latlon,dtime):
     assert isinstance(iono,DataArray)
