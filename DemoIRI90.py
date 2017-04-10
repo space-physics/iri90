@@ -4,8 +4,8 @@ import numpy as np
 from matplotlib.pyplot import show
 import seaborn as sns
 #
-from pyiri90 import runiri,plasmaprop
-from pyiri90.plots import summary,sweep,plotiono
+from pyiri90 import runiri
+from pyiri90.plots import plotiono
 
 f0 = 3.5e6 # radar frequency [Hz]
 B0 = 60e-6 # Geomagnetic field strength [Tesla] #TODO verify at altitude
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     p = ArgumentParser()
     p.add_argument('--alt',help='START STOP STEP altitude [km]',type=float,nargs=3,default=(85,500,1.))
     p.add_argument('-t','--time',help='datetime of simulation',default='2012-07-21T12')
-    p.add_argument('-c','--latlon',help='geodetic coordinates of simulation',default=(30,0),type=float)
+    p.add_argument('-c','--latlon',help='geodetic coordinates of simulation',default=(65,-147.5),type=float)
     p.add_argument('--f107',type=float,default=200.)
     p.add_argument('--f107a',type=float,default=200.)
     p.add_argument('--ap',type=int,default=4)
@@ -26,16 +26,8 @@ if __name__ == '__main__':
 
     altkm = np.arange(p.alt[0], p.alt[1], p.alt[2])
     dtime = parse(p.time)
-
-    iono = runiri(dtime,altkm,p.latlon,p.f107, p.f107a, ap=p.ap)
 #%%
-    wp,wH,reflectionheight = plasmaprop(iono,f0,B0)
-#%% plots
+    iono = runiri(dtime,altkm,p.latlon,p.f107, p.f107a, ap=p.ap)
 
     plotiono(iono,dtime,p.latlon,p.f107,p.f107a,p.ap)
-
-    summary(iono,reflectionheight,f0,p.latlon,dtime)
-
-    sweep(iono,fs,B0,p.latlon,dtime)
-
     show()
