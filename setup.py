@@ -11,6 +11,7 @@ iridata = glob(join('data','*.asc'))
 #%% install
 setup(name='pyiri90',
       packages=['pyiri90'],
+      version = '1.0.0',
       author='Michael Hirsch, Ph.D.',
       ext_modules=[Extension(name='iri90',
                     sources=['fortran/iri90.f'],
