@@ -1,14 +1,10 @@
 """
 IRI-90 international reference ionosphere in Python
 """
-from pathlib import Path
-import os
 import numpy as np
 from xarray import DataArray
 #
 import iri90 #fortran
-
-root = Path(__file__).parents[1]
 
 def runiri(dt,z,glatlon,f107,f107a,ap):
     glat,glon = glatlon
@@ -18,13 +14,10 @@ def runiri(dt,z,glatlon,f107,f107a,ap):
     #JF = (1,1,1) + (0,0,0) +(1,)*14 + (0,1,0,1,1,1,1,0,0,0,1,1,0,1,0,1,1,1) #for 2013 version of IRI
 
 #%% call IRI
-    cwd = os.getcwd()
-    os.chdir(root)
     outf,oarr = iri90.iri90(JF,jmag,glat,glon % 360., -f107,
                        dt.strftime('%m%d'),
                        dt.hour+dt.minute//60+dt.second//3600,
                        z,'data/')
-    os.chdir(cwd)
 #%% arrange output
     iono = DataArray(np.empty((z.size,9)),
                      coords={'alt_km':z,

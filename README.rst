@@ -13,7 +13,7 @@ IRI90-international reference ionosphere in Python
 "IRI-90 provides monthly mean values for magnetically quiet
 conditions at non-auroral latitudes in the altitude range 50km to 2000km. "
 
-.. image:: data/demoiri.png
+.. image:: .github/demoiri.png
     :alt: example IRI output
 
 Installation
