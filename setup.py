@@ -20,7 +20,7 @@ setup(name='pyiri90',
       install_requires=req,
       classifiers=[
       'Intended Audience :: Science/Research',
-      'Development Status :: 5 - Production / Stable',
+      'Development Status :: 5 - Production/Stable',
       'License :: OSI Approved :: MIT License',
       'Topic :: Scientific/Engineering :: Atmospheric Science',
       'Programming Language :: Python :: 3.6',
