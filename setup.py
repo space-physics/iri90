@@ -17,4 +17,11 @@ setup(name='pyiri90',
                     f2py_options=['--quiet'])],
      data_files=[('pyiri90/data',iridata)],
      install_requires=req,
+      classifiers=[
+      'Intended Audience :: Science/Research',
+      'Development Status :: 5 - Production / Stable',
+      'License :: OSI Approved :: MIT License',
+      'Topic :: Scientific/Engineering :: Atmospheric Science',
+      'Programming Language :: Python :: 3.6',
+      ],
 	  )
