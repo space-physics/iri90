@@ -1,3 +1,9 @@
+.. image:: https://travis-ci.org/scivision/pyiri90.svg?branch=master
+    :target: https://travis-ci.org/scivision/pyiri90
+.. image:: https://coveralls.io/repos/github/scivision/pyiri90/badge.svg?branch=master
+    :target: https://coveralls.io/github/scivision/pyiri90?branch=master
+
+
 =============
 iri90-python
 =============
