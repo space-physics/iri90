@@ -1,10 +1,19 @@
 #!/usr/bin/env python
+req=['nose','numpy','xarray','matplotlib']
+# %%
+try:
+    import conda.cli
+    conda.cli.main('install',*req)
+except Exception as e:
+    import pip
+    pip.main(['install'] + req)
+# %%
 import setuptools #enables develop
 from numpy.distutils.core import setup,Extension
 from glob import glob
 from os.path import join
 
-req = ['nose','numpy','xarray','matplotlib']
+
 
 #%% fortran data files
 iridata = glob(join('data','*.asc'))
@@ -23,6 +32,6 @@ setup(name='pyiri90',
       'Development Status :: 5 - Production/Stable',
       'License :: OSI Approved :: MIT License',
       'Topic :: Scientific/Engineering :: Atmospheric Science',
-      'Programming Language :: Python :: 3.6',
+      'Programming Language :: Python :: 3',
       ],
 	  )
