@@ -1,14 +1,9 @@
 #!/usr/bin/env python
-req=['nose','numpy','xarray','matplotlib']
+install_requires=['numpy','xarray']
+tests_require=['nose','coveralls']
 # %%
-try:
-    import conda.cli
-    conda.cli.main('install',*req)
-except Exception as e:
-    import pip
-    pip.main(['install'] + req)
-# %%
-import setuptools #enables develop
+
+from setuptools import find_packages
 from numpy.distutils.core import setup,Extension
 from glob import glob
 from os.path import join
@@ -19,14 +14,18 @@ from os.path import join
 iridata = glob(join('data','*.asc'))
 #%% install
 setup(name='pyiri90',
-      packages=['pyiri90'],
+      packages=find_packages(),
       version = '1.0.1',
       author='Michael Hirsch, Ph.D.',
       ext_modules=[Extension(name='iri90',
                     sources=['fortran/iri90.f'],
                     f2py_options=['--quiet'])],
       package_data={'pyiri90':['data/*.asc']},
-      install_requires=req,
+      install_requires=install_requires,
+      tests_require=tests_require,
+      extras_require={'tests':tests_require,
+                      'plot':['matplotlib'],},
+      python_requires='>=2.7',
       classifiers=[
       'Intended Audience :: Science/Research',
       'Development Status :: 5 - Production/Stable',
