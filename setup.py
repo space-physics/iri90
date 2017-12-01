@@ -25,7 +25,7 @@ setup(name='pyiri90',
       tests_require=tests_require,
       extras_require={'tests':tests_require,
                       'plot':['matplotlib'],},
-      python_requires='>=2.7',
+      python_requires='>=3.5',
       classifiers=[
       'Intended Audience :: Science/Research',
       'Development Status :: 5 - Production/Stable',
