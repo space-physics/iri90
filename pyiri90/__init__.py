@@ -22,29 +22,19 @@ def runiri(dt,z,glatlon,f107,f107a,ap):
                        dt.hour+dt.minute//60+dt.second//3600,
                        z,str(rdir/'data')+'/')
 #%% arrange output
-    iono = DataArray(np.empty((z.size,9)),
+    iono = DataArray(outf[:9,:].T,
                      coords={'alt_km':z,
                              'sim':['ne','Tn','Ti','Te','nO+','nH+','nHe+','nO2+','nNO+']},
                      dims=['alt_km','sim'])
-    #                          'nClusterIons','nN+'])
-    iono.loc[:,'ne'] = outf[0,:]  # ELECTRON DENSITY/M-3
-    iono.loc[:,'Tn'] = outf[1,:]  # NEUTRAL TEMPERATURE/K
 
-    iono.loc[:,'Ti'] = outf[2,:]  # ION TEMPERATURE/K
 #    i=(iono['Ti']<iono['Tn']).values
 #    iono.ix[i,'Ti'] = iono.ix[i,'Tn']
 
-    iono.loc[:,'Te'] = outf[3,:]  # ELECTRON TEMPERATURE/K
 #    i=(iono['Te']<iono['Tn']).values
 #    iono.ix[i,'Te'] = iono.ix[i,'Tn']
 
 #%%   iri90 outputs percentage of Ne
-    iono.loc[:,'nO+'] = iono.loc[:,'ne'] * outf[4,:]/100. #O+ ion density / M-3
-    iono.loc[:,'nH+'] = iono.loc[:,'ne'] * outf[5,:]/100. #H+ ion density / M-3
-    iono.loc[:,'nHe+']= iono.loc[:,'ne'] * outf[6,:]/100. #He+ ion density / M-3
-    iono.loc[:,'nO2+']= iono.loc[:,'ne'] * outf[7,:]/100. #O2+ "" "" ""
-    iono.loc[:,'nNO+']= iono.loc[:,'ne'] * outf[8,:]/100. #NO+ "" "" ""
-
+    iono.loc[:,['nO+','nH+','nHe+','nO2+','nNO+']] *= iono.loc[:,'ne']/100.
 #%% These two parameters only output if JF(6)=False, otherwise bogus values
     #iono['nClusterIons'] = iono['ne'] * outf[9,:]/100.
     #iono['nN+'] = iono['ne'] * outf[10,:]/100.

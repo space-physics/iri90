@@ -1,12 +1,14 @@
-from matplotlib.pyplot import subplots
+from matplotlib.pyplot import figure
 from xarray import DataArray
+from datetime import datetime
 #
 Ts = ['Tn','Ti','Te']
 
-def plotiono(iono:DataArray,dtime,latlon,f107,f107a,ap):
-    assert isinstance(iono,DataArray)
+def plotiono(iono:DataArray, dtime:datetime, latlon:tuple, f107:float, f107a:float, ap:float):
+    assert isinstance(iono, DataArray)
 
-    fg,axs = subplots(1,2,sharey=True)
+    fg = figure()
+    axs = fg.subplots(1,2, sharey=True)
 
     ax = axs[0]
     for p in iono.sim:
