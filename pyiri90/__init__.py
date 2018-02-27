@@ -8,6 +8,7 @@ from xarray import DataArray
 import iri90 #fortran
 
 rdir = Path(__file__).parent
+Ts = ['Tn','Ti','Te']
 
 def runiri(dt,z,glatlon,f107,f107a,ap):
     glat,glon = glatlon
@@ -38,8 +39,9 @@ def runiri(dt,z,glatlon,f107,f107a,ap):
 #%% These two parameters only output if JF(6)=False, otherwise bogus values
     #iono['nClusterIons'] = iono['ne'] * outf[9,:]/100.
     #iono['nN+'] = iono['ne'] * outf[10,:]/100.
+# %% negative indicates undefined
+    for c in iono.sim:
 
-    iono.loc[outf[1,:]<0,'Tn'] = np.nan
-    iono.loc[outf[2,:]<0,'Ti'] = np.nan
-    iono.loc[outf[3,:]<0,'Te'] = np.nan
+        iono.loc[iono.loc[:,c]<= 0., c] = np.nan
+
     return iono
