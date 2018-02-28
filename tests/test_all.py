@@ -20,7 +20,7 @@ class BasicTests(unittest.TestCase):
 
         I = iono.loc[235,:]
         It = [2.12232176e+11, 1.13743994e+03, 1.13743994e+03,
-              1.94536694e+03, 1.99106658e+11, 0, 0, 1.76997920e+08,   1.29485240e+10]
+              1.94536694e+03, 1.99106658e+11, np.nan, np.nan, 1.76997920e+08,   1.29485240e+10]
 
         np.testing.assert_allclose(I, It)
 

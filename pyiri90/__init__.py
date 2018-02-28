@@ -30,6 +30,7 @@ def runiri(t, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int):
 
     monthday = (t.strftime('%m%d'))
     hourfrac = t.hour + t.minute//60+ t.second//3600
+    datadir = str(rdir/'data')+'/'
 #%% call IRI
     outf,oarr = iri90.iri90(JF,jmag,
                             glat,glon % 360.,
@@ -37,7 +38,7 @@ def runiri(t, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int):
                             monthday,
                             hourfrac,
                             altkm,
-                            str(rdir/'data')+'/')
+                            datadir)
 #%% arrange output
     iono = DataArray(outf[:9,:].T,
                      coords={'alt_km':altkm,

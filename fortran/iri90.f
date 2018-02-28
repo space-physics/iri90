@@ -158,14 +158,16 @@ C
        SUBROUTINE IRI90(JF,JMAG,ALATI,ALONG,RZ12,MMDD,DHOUR,
      &                  ZKM,NZ,drect,OUTF,OARR)
 
+      use, intrinsic:: iso_fortran_env, only: error_unit, output_unit
+
       logical, intent(in) :: JF(12)
       integer,intent(in) :: JMAG,MMDD
       real,intent(in) :: alati,along,rz12, dhour, zkm(nz)
       real,intent(out) :: outf(11,nz),oarr(30)
 
       character(*) drect
-      character(50) path
-      character(10) filename
+      character(256) path
+      character(16) filename
       INTEGER               DAYNR,DDO,DO2,SEASON,SEADAY
       REAL               LATI,LONGI,MO2,MO,MODIP,NMF2,MAGBR
       REAL                NMF1,NME,NMD,MM,MLAT,MLONG,NOBO2
@@ -238,9 +240,8 @@ C FIRST SPECIFY YOUR COMPUTERS CHANNEL NUMBERS ....................
 C AGNR=OUTPUT (OUTPUT IS DISPLAYED OR STORED IN FILE OUTPUT.IRI)...
 C IUCCIR=UNIT NUMBER FOR CCIR COEFFICIENTS ........................
 C
-      MONITO=6
       IUCCIR=10
-      KONSOL=6
+      KONSOL=output_unit
       IF (JF(12)) KONSOL=12
 
 c
@@ -409,7 +410,7 @@ C READ CCIR COEFFICIENT SET FOR CHOSEN MONTH....................
 C
 7797    WRITE(filename,104) MONTH+10
 104     FORMAT('ccir',I2,'.asc')
-        call dfp(drect,filename,path)
+        path = trim(drect) // trim(filename)
         OPEN(IUCCIR,FILE=path,STATUS='OLD',ERR=8448)
         READ(IUCCIR,4689) F2,FM3
 4689    FORMAT(4E15.8)
@@ -420,7 +421,7 @@ C
        if (URSIF2) then
          WRITE(filename,1144) MONTH+10
 1144      FORMAT('ursi',I2,'.asc')
-          call dfp(drect,filename,path)
+          path = trim(drect) // trim(filename)
           OPEN(IUCCIR,FILE=path,STATUS='OLD',ERR=8448)
           READ(IUCCIR,4689) F2
           CLOSE(IUCCIR)
@@ -429,8 +430,9 @@ C
         MONTHO=MONTH
        GOTO 4291
 
-8448       write(monito,8449) path
-8449       format(' IRI90: File ',A50,'not found')
+8448       write(error_unit,8449) trim(path)
+8449       format('IRI90: File ',A,' not found')
+! must be "error stop" so Travis-CI tests, etc. fail when this fails.
        error stop
 C
 C LINEAR INTERPOLATION IN SOLAR ACTIVITY
@@ -1014,35 +1016,7 @@ C
       OARR(27)=MODIP
 
       END SUBROUTINE IRI90
-C
-C
-C Subroutine DFP, Stan Solomon, 3/92, splices filename to drectory
-C
-      Subroutine dfp(drect,filename,path)
-      character*(*) drect,filename,path
-      character*50 blanks
-      data blanks/'                                                  '/
-      path=blanks
-      nch=len(drect)
-      do 10 i=1,nch
-      if (drect(i:i).ne.' ') goto 20
-   10 continue
-   20 lb=i
-      do 30 i=nch,1,-1
-      if (drect(i:i).ne.' ') goto 40
-   30 continue
-   40 le=i
-      if (lb.ge.nch .or. le.le.0) then
-        path(1:10)=filename(1:10)
-      else
-        nd=le-lb+1
-        path(1:nd)=drect(lb:le)
-        path(nd+1:nd+10)=filename(1:10)
-      endif
 
-      end Subroutine dfp
-C
-C
 C
 C
 C IRIF12.FOR ------------------------------------- OCTOBER 1991
