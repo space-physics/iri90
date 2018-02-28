@@ -9,8 +9,8 @@ if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser()
     p.add_argument('-t','--trange',help='START STOP STEP (hours) time [UTC]',nargs=3,
-                   default=('2012-07-21','2012-07-22',1.))
-    p.add_argument('--alt',help='altitude [km]',type=float, default=150.)
+                   default=('2012-08-21','2012-08-22',0.25))
+    p.add_argument('--alt',help='altitude [km]',type=float, default=190.)
     p.add_argument('-c','--latlon',help='geodetic coordinates of simulation',
                    type=float,default=(65,-147.5))
     p.add_argument('--f107',type=float,default=200.)
