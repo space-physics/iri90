@@ -23,7 +23,9 @@ addons:
 
 install: python -m pip install -e .[tests]
 
-script: coverage run tests/test_all.py -v
+script: 
+  - pytest
+  - [[ $TRAVIS_PYTHON_VERSION == 3.6* ]] && coverage run tests/test_all.py -v
 
 after_success: 
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.6* ]]; then coveralls; fi
+  - [[ $TRAVIS_PYTHON_VERSION == 3.6* ]] && coveralls

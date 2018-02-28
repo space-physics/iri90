@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 install_requires=['numpy','xarray']
-tests_require=['nose','coveralls']
+tests_require=['pytest','coveralls']
 # %%
 from setuptools import find_packages
 from numpy.distutils.core import setup,Extension
