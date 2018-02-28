@@ -20,6 +20,6 @@ if __name__ == '__main__':
     dtime = parse(p.time)
 # %% run IRI90 across altitude
     iono =  pyiri90.runiri(dtime,altkm,p.latlon,p.f107, p.f107a, ap=p.ap)
-# %% plots
-    pyiri90.plots.plotiono(iono)
+# %% altitude profile plot
+    pyiri90.plots.plotalt(iono)
     show()

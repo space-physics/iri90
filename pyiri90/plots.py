@@ -1,11 +1,11 @@
 from matplotlib.pyplot import figure
-from xarray import DataArray
-from datetime import datetime
+import xarray
+import numpy as np
 #
 Ts = ['Tn','Ti','Te']
 
-def plotiono(iono:DataArray):
-    assert isinstance(iono, DataArray)
+def plotalt(iono:xarray.DataArray):
+    assert isinstance(iono, xarray.DataArray)
 
     fg = figure(figsize=(15,12))
     axs = fg.subplots(1,2, sharey=True)
@@ -14,9 +14,9 @@ def plotiono(iono:DataArray):
     for p in iono.sim:
         if p in Ts:
             continue
-        ax.semilogx(iono.loc[:,p], iono.alt_km, label=p.values)
+        ax.semilogx(iono.loc[:,p], iono.alt_km, label=p.item())
 
-    ax.set_xlabel('density [m^-3]')
+    ax.set_xlabel('density [m$^{-3}$]')
     ax.set_ylabel('altitude [km]')
     ax.set_xlim(1e6,None)
     ax.legend()
@@ -26,7 +26,6 @@ def plotiono(iono:DataArray):
     for p in Ts:
         ax.plot(iono.loc[:,p], iono.alt_km, label=p)
 
-
     ax.set_xlabel('Temperature [K]')
     ax.legend()
     ax.grid(True)
@@ -34,3 +33,20 @@ def plotiono(iono:DataArray):
     ia = iono.attrs
     fg.suptitle(f"IRI90 {ia['glatlon']} {ia['time']}\n f10.7={ia['f107']} f107avg={ia['f107a']} Ap={ia['ap']}")
 
+
+def plottime(iono:xarray.DataArray):
+    assert isinstance(iono, xarray.DataArray)
+
+    fg = figure(figsize=(15,8))
+    ax = fg.gca()
+
+    for p in iono.sim:
+        if p in Ts:
+            continue
+        ax.plot(iono.time, iono.loc[:,p], label=p.item())
+
+    ax.set_ylabel('density [m$^{-3}$]')
+    ax.set_xlabel('time [UTC]')
+    ax.set_title(np.datetime_as_string(iono.time[0])[:-13] + ' to ' + np.datetime_as_string(iono.time[0])[:-13])
+    ax.legend()
+    ax.grid(True)

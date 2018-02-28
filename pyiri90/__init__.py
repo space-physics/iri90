@@ -10,7 +10,7 @@ import iri90 #fortran
 
 rdir = Path(__file__).parent
 Ts = ['Tn','Ti','Te']
-
+simout = ['ne','Tn','Ti','Te','nO+','nH+','nHe+','nO2+','nNO+']
 
 def datetimerange(start:datetime, end:datetime, step:timedelta) -> list:
     """like range() for datetime!"""
@@ -27,15 +27,13 @@ def runiri(t:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:i
         """ collect IRI90 output into xarray.DataArray with metadata"""
         if isinstance(altkm,(list,tuple,np.ndarray)):  # altitude profile
             iono = xarray.DataArray(outf[:9,:].T,
-                         coords={'alt_km':altkm,
-                                 'sim':['ne','Tn','Ti','Te','nO+','nH+','nHe+','nO2+','nNO+']},
+                         coords={'alt_km':altkm, 'sim':simout},
                          dims=['alt_km','sim'],
                          attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'time':t})
         else:
             iono = xarray.DataArray(outf[:9,:].T,
-                         coords={'time':t,
-                                 'sim':['ne','Tn','Ti','Te','nO+','nH+','nHe+','nO2+','nNO+']},
-                         dims=['alt_km','sim'],
+                         coords={'time':[t], 'sim':simout},
+                         dims=['time','sim'],
                          attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'alt_km':altkm,})
 
     #    i=(iono['Ti']<iono['Tn']).values
@@ -80,10 +78,19 @@ def runiri(t:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:i
 
 
 
-def timeprofile(tlim:tuple, dt:timedelta, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int):
+def timeprofile(tlim:tuple, dt:timedelta,
+                altkm:float, glatlon:tuple,
+                f107:float, f107a:float, ap:int) -> xarray.DataArray:
     """compute IRI90 at a single altiude, over time range"""
 
     T = datetimerange(tlim[0], tlim[1], dt)
 
+    iono = xarray.DataArray(np.empty((len(T),9)),
+                            coords={'time':T, 'sim':simout},
+                            dims=['time','sim'],
+                            )
+
     for t in T:
-        iono = runiri(t, altkm, glatlon, f107, f107a, ap)
+        iono.loc[t,:] = runiri(t, altkm, glatlon, f107, f107a, ap)
+
+    return iono
