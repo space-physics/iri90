@@ -1,6 +1,7 @@
 """
 IRI-90 international reference ionosphere in Python
 """
+from datetime import datetime,timedelta
 from pathlib import Path
 import numpy as np
 from xarray import DataArray
@@ -10,23 +11,39 @@ import iri90 #fortran
 rdir = Path(__file__).parent
 Ts = ['Tn','Ti','Te']
 
-def runiri(dt,z,glatlon,f107,f107a,ap):
+
+def datetimerange(start:datetime, end:datetime, step:timedelta) -> list:
+    """like range() for datetime!"""
+    assert isinstance(start, datetime)
+    assert isinstance(end, datetime)
+    assert isinstance(step, timedelta)
+
+    return [start + i*step for i in range((end-start) // step)]
+
+
+def runiri(t, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int):
     glat,glon = glatlon
     jmag=0 # coordinates are: 0:geographic 1: magnetic
 
     JF = np.array((1,1,1,1,0,1,1,1,1,1,1,0),bool) #Solomon 1993 version of IRI
     #JF = (1,1,1) + (0,0,0) +(1,)*14 + (0,1,0,1,1,1,1,0,0,0,1,1,0,1,0,1,1,1) #for 2013 version of IRI
 
+    monthday = (t.strftime('%m%d'))
+    hourfrac = t.hour + t.minute//60+ t.second//3600
 #%% call IRI
-    outf,oarr = iri90.iri90(JF,jmag,glat,glon % 360., -f107,
-                       dt.strftime('%m%d'),
-                       dt.hour+dt.minute//60+dt.second//3600,
-                       z,str(rdir/'data')+'/')
+    outf,oarr = iri90.iri90(JF,jmag,
+                            glat,glon % 360.,
+                            -f107,
+                            monthday,
+                            hourfrac,
+                            altkm,
+                            str(rdir/'data')+'/')
 #%% arrange output
     iono = DataArray(outf[:9,:].T,
-                     coords={'alt_km':z,
+                     coords={'alt_km':altkm,
                              'sim':['ne','Tn','Ti','Te','nO+','nH+','nHe+','nO2+','nNO+']},
-                     dims=['alt_km','sim'])
+                     dims=['alt_km','sim'],
+                     attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon})
 
 #    i=(iono['Ti']<iono['Tn']).values
 #    iono.ix[i,'Ti'] = iono.ix[i,'Tn']
@@ -41,7 +58,12 @@ def runiri(dt,z,glatlon,f107,f107a,ap):
     #iono['nN+'] = iono['ne'] * outf[10,:]/100.
 # %% negative indicates undefined
     for c in iono.sim:
-
         iono.loc[iono.loc[:,c]<= 0., c] = np.nan
 
     return iono
+
+def timeprofile(tlim:tuple, dt:timedelta, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int):
+    """compute IRI90 at a single altiude, over time range"""
+
+    t = datetimerange(tlim[0], tlim[1], dt)
+
