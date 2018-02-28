@@ -31,5 +31,5 @@ def plotiono(iono:DataArray, dtime:datetime, latlon:tuple, f107:float, f107a:flo
     ax.legend()
     ax.grid(True)
 
-    fg.suptitle(f"IRI90 {latlon} {dtime} f10.7={f107} f107avg={f107a} Ap={ap}")
+    fg.suptitle(f"IRI90 {latlon} {dtime}\n f10.7={f107} f107avg={f107a} Ap={ap}")
 
