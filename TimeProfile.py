@@ -21,7 +21,7 @@ if __name__ == '__main__':
     tlim = (parse(p.trange[0]), parse(p.trange[1]))
     dt = timedelta(hours=p.trange[2])
 # %% run IRI90 across time
-    iono =  pyiri90.timeprofile(tlim, dt, p.altkm, p.latlon, p.f107, p.f107a, ap=p.ap)
+    iono =  pyiri90.timeprofile(tlim, dt, p.alt, p.latlon, p.f107, p.f107a, ap=p.ap)
 # %% plots
     pyiri90.plots.plottime(iono)
     show()

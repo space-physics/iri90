@@ -3,7 +3,7 @@ import numpy as np
 from datetime import datetime
 from pyiri90 import runiri
 
-def test_iri90():
+def test_altitude():
     altkm = np.arange(90,500,5)
     dtime = datetime(2012,1,1,12)
     latlon = (30.,0.)

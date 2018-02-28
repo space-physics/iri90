@@ -4,7 +4,7 @@ from datetime import datetime
 #
 Ts = ['Tn','Ti','Te']
 
-def plotiono(iono:DataArray, dtime:datetime, latlon:tuple, f107:float, f107a:float, ap:float):
+def plotiono(iono:DataArray):
     assert isinstance(iono, DataArray)
 
     fg = figure(figsize=(15,12))
@@ -31,5 +31,6 @@ def plotiono(iono:DataArray, dtime:datetime, latlon:tuple, f107:float, f107a:flo
     ax.legend()
     ax.grid(True)
 
-    fg.suptitle(f"IRI90 {latlon} {dtime}\n f10.7={f107} f107avg={f107a} Ap={ap}")
+    ia = iono.attrs
+    fg.suptitle(f"IRI90 {ia['glatlon']} {ia['time']}\n f10.7={ia['f107']} f107avg={ia['f107a']} Ap={ia['ap']}")
 

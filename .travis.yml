@@ -10,9 +10,6 @@ os:
   
 group: travis_latest
 
-env: FC=gfortran
-
-
 git:
   depth: 3
 
@@ -24,8 +21,8 @@ addons:
 install: python -m pip install -e .[tests]
 
 script: 
-  - pytest
-  - [[ $TRAVIS_PYTHON_VERSION == 3.6* ]] && coverage run tests/test_all.py -v
+  - pytest -v
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.6* ]]; then coverage run tests/test_all.py -v; fi
 
 after_success: 
-  - [[ $TRAVIS_PYTHON_VERSION == 3.6* ]] && coveralls
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.6* ]]; then coveralls; fi

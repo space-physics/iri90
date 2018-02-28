@@ -4,7 +4,7 @@ IRI-90 international reference ionosphere in Python
 from datetime import datetime,timedelta
 from pathlib import Path
 import numpy as np
-from xarray import DataArray
+import xarray
 #
 import iri90 #fortran
 
@@ -12,7 +12,7 @@ rdir = Path(__file__).parent
 Ts = ['Tn','Ti','Te']
 
 
-def datetimerange(start:datetime, end:datetime, step:timedelta) -> list:
+def datetimerange(start:datetime, end:datetime, step:timedelta) -> xarray.DataArray:
     """like range() for datetime!"""
     assert isinstance(start, datetime)
     assert isinstance(end, datetime)
@@ -21,7 +21,7 @@ def datetimerange(start:datetime, end:datetime, step:timedelta) -> list:
     return [start + i*step for i in range((end-start) // step)]
 
 
-def runiri(t, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int):
+def runiri(t:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int):
     glat,glon = glatlon
     jmag=0 # coordinates are: 0:geographic 1: magnetic
 
@@ -40,11 +40,11 @@ def runiri(t, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int):
                             altkm,
                             datadir)
 #%% arrange output
-    iono = DataArray(outf[:9,:].T,
+    iono = xarray.DataArray(outf[:9,:].T,
                      coords={'alt_km':altkm,
                              'sim':['ne','Tn','Ti','Te','nO+','nH+','nHe+','nO2+','nNO+']},
                      dims=['alt_km','sim'],
-                     attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon})
+                     attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'time':t})
 
 #    i=(iono['Ti']<iono['Tn']).values
 #    iono.ix[i,'Ti'] = iono.ix[i,'Tn']
