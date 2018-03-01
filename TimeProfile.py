@@ -19,9 +19,9 @@ if __name__ == '__main__':
     p = p.parse_args()
 # %% user parameters
     tlim = (parse(p.trange[0]), parse(p.trange[1]))
-    dt = timedelta(hours=p.trange[2])
+    dt = timedelta(hours=p.trange[2]) # timedelta reduces to seconds, etc for sub-hour step size
 # %% run IRI90 across time
     iono =  pyiri90.timeprofile(tlim, dt, p.alt, p.latlon, p.f107, p.f107a, ap=p.ap)
 # %% plots
-    pyiri90.plots.plottime(iono)
+    pyiri90.plots.plottime(iono,'ne')
     show()

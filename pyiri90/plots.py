@@ -34,7 +34,15 @@ def plotalt(iono:xarray.DataArray):
     fg.suptitle(f"IRI90 {ia['glatlon']} {ia['time']}\n f10.7={ia['f107']} f107avg={ia['f107a']} Ap={ia['ap']}")
 
 
-def plottime(iono:xarray.DataArray):
+def plottime(iono:xarray.DataArray, species:tuple=None):
+    """
+    plots IRI90 time profile
+
+    inputs:
+    -------
+    iono: DataArray containing metadata for sim
+    species: optional tuple specifying which species to plot (default is to plot all species)
+    """
     assert isinstance(iono, xarray.DataArray)
 
     fg = figure(figsize=(15,8))
@@ -43,10 +51,10 @@ def plottime(iono:xarray.DataArray):
     for p in iono.sim:
         if p in Ts:
             continue
-        ax.plot(iono.time, iono.loc[:,p], label=p.item())
+        ax.plot(iono.time, iono.loc[:,p], marker='*',label=p.item())
 
     ax.set_ylabel('density [m$^{-3}$]')
     ax.set_xlabel('time [UTC]')
-    ax.set_title(np.datetime_as_string(iono.time[0])[:-13] + ' to ' + np.datetime_as_string(iono.time[0])[:-13])
+    ax.set_title(f'{np.datetime_as_string(iono.time[0])[:-13]} to {np.datetime_as_string(iono.time[0])[:-13]}\n {iono.attrs["glatlon"]}')
     ax.legend()
     ax.grid(True)

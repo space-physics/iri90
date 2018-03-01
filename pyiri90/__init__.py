@@ -59,14 +59,14 @@ def runiri(t:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:i
     JF = np.array((1,1,1,1,0,1,1,1,1,1,1,0),bool) #Solomon 1993 version of IRI
     #JF = (1,1,1) + (0,0,0) +(1,)*14 + (0,1,0,1,1,1,1,0,0,0,1,1,0,1,0,1,1,1) #for 2013 version of IRI
 
-    monthday = (t.strftime('%m%d'))
-    hourfrac = t.hour + t.minute//60+ t.second//3600
+    monthday = t.month*100 + t.day  # yep, that's how the IRI code wants it, NOT as character.
+    hourfrac = t.hour + t.minute/60+ t.second/3600
     datadir = str(rdir/'data')+'/'
 #%% call IRI
     outf,oarr = iri90.iri90(JF,jmag,
                             glat, glon % 360.,
                             -f107,
-                            monthday,
+                            monthday, # integer
                             hourfrac,
                             altkm,
                             datadir)
@@ -88,6 +88,7 @@ def timeprofile(tlim:tuple, dt:timedelta,
     iono = xarray.DataArray(np.empty((len(T),9)),
                             coords={'time':T, 'sim':simout},
                             dims=['time','sim'],
+                            attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'alt_km':altkm,}
                             )
 
     for t in T:
