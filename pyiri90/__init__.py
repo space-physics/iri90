@@ -25,16 +25,10 @@ def runiri(t:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:i
 
     def _collect_output() -> xarray.DataArray:
         """ collect IRI90 output into xarray.DataArray with metadata"""
-        if isinstance(altkm,(list,tuple,np.ndarray)):  # altitude profile
-            iono = xarray.DataArray(outf[:9,:].T,
+        iono = xarray.DataArray(outf[:9,:].T,
                          coords={'alt_km':altkm, 'sim':simout},
                          dims=['alt_km','sim'],
                          attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'time':t})
-        else:
-            iono = xarray.DataArray(outf[:9,:].T,
-                         coords={'time':[t], 'sim':simout},
-                         dims=['time','sim'],
-                         attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'alt_km':altkm,})
 
     #    i=(iono['Ti']<iono['Tn']).values
     #    iono.ix[i,'Ti'] = iono.ix[i,'Tn']
@@ -79,19 +73,19 @@ def runiri(t:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:i
 
 
 def timeprofile(tlim:tuple, dt:timedelta,
-                altkm:float, glatlon:tuple,
+                altkm:np.ndarray, glatlon:tuple,
                 f107:float, f107a:float, ap:int) -> xarray.DataArray:
     """compute IRI90 at a single altiude, over time range"""
 
     T = datetimerange(tlim[0], tlim[1], dt)
 
-    iono = xarray.DataArray(np.empty((len(T),9)),
-                            coords={'time':T, 'sim':simout},
-                            dims=['time','sim'],
+    iono = xarray.DataArray(np.empty((len(T),altkm.size,9)),
+                            coords={'time':T,'alt_km':altkm, 'sim':simout},
+                            dims=['time','alt_km','sim'],
                             attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'alt_km':altkm,}
                             )
 
     for t in T:
-        iono.loc[t,:] = runiri(t, altkm, glatlon, f107, f107a, ap)
+        iono.loc[t,...] = runiri(t, altkm, glatlon, f107, f107a, ap)
 
     return iono

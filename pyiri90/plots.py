@@ -45,13 +45,21 @@ def plottime(iono:xarray.DataArray, species:tuple=None):
     """
     assert isinstance(iono, xarray.DataArray)
 
+    if not species:
+        species = [p.item() for p in iono.sim]
+    elif isinstance(species,str):
+        species = [species]
+    else: # assuming it's an iterable
+        pass
+
     fg = figure(figsize=(15,8))
     ax = fg.gca()
 
-    for p in iono.sim:
+    for p in species:
         if p in Ts:
             continue
-        ax.plot(iono.time, iono.loc[:,p], marker='*',label=p.item())
+        for alt in iono.alt_km:
+            ax.plot(iono.time, iono.loc[:,alt,p], marker='*',label=f'{p}, {alt.item()} km')
 
     ax.set_ylabel('density [m$^{-3}$]')
     ax.set_xlabel('time [UTC]')
