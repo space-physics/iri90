@@ -18,7 +18,7 @@ addons:
     packages:
       - gfortran
 
-install: python -m pip install -e .[tests]
+install: pip -q install -e .[tests]
 
 script: 
   - pytest -v

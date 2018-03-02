@@ -17,3 +17,6 @@ def test_altitude():
           1.94536694e+03, 1.99106658e+11, np.nan, np.nan, 1.76997920e+08,   1.29485240e+10]
 
     np.testing.assert_allclose(I, It)
+    
+if __name__ == '__main__':
+    np.testing.run_module_suite()
