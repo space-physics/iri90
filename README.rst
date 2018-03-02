@@ -12,7 +12,7 @@ PyIRI90
 IRI90-international reference ionosphere in Python
 
     IRI-90 provides **monthly mean values** for magnetically quiet
-conditions at non-auroral latitudes in the **altitude range 50km to 2000km**.
+    conditions at non-auroral latitudes in the **altitude range 50km to 2000km**.
 
 However, IRI90 is often used as an initialization for conditions at auroral latitudes, understanding the caveats.
 
