@@ -82,7 +82,7 @@ def timeprofile(tlim:tuple, dt:timedelta,
     iono = xarray.DataArray(np.empty((len(T),altkm.size,9)),
                             coords={'time':T,'alt_km':altkm, 'sim':simout},
                             dims=['time','alt_km','sim'],
-                            attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'alt_km':altkm,}
+                            attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon}
                             )
 
     for t in T:
