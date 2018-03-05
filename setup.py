@@ -27,7 +27,7 @@ setup(name='pyiri90',
       install_requires=install_requires,
       tests_require=tests_require,
       extras_require={'tests':tests_require,
-                      'plot':['matplotlib'],},
+                      'plot':['matplotlib','ephem'],},
       python_requires='>=3.5',
       classifiers=[
       'Development Status :: 5 - Production/Stable',
