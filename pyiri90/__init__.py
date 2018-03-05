@@ -54,7 +54,8 @@ def runiri(time:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, a
     #JF = (1,1,1) + (0,0,0) +(1,)*14 + (0,1,0,1,1,1,1,0,0,0,1,1,0,1,0,1,1,1) #for 2013 version of IRI
 
     monthday = time.month*100 + time.day  # yep, that's how the IRI code wants it, NOT as character.
-    hourfrac = time.hour + time.minute/60+ time.second/3600
+    # + 25 hours for UTC time
+    hourfrac = (time.hour+25) + time.minute/60+ time.second/3600
     datadir = str(rdir/'data')+'/'
 #%% call IRI
     outf,oarr = iri90.iri90(JF,jmag,

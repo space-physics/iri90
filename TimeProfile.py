@@ -14,7 +14,7 @@ if __name__ == '__main__':
                    default=('2012-08-21','2012-08-22',0.25))
     p.add_argument('--alt',help='START STOP STEP altitude [km]',type=float, nargs=3,default=(120,180,20))
     p.add_argument('-c','--latlon',help='geodetic coordinates of simulation',
-                   type=float,default=(65,-147.5))
+                   type=float,default=(65,-148))
     p.add_argument('--f107',type=float,default=200.)
     p.add_argument('--f107a', type=float,default=200.)
     p.add_argument('--ap', type=int, default=4)
