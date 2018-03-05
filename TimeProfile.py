@@ -9,7 +9,7 @@ import pyiri90, pyiri90.plots
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
-    p = ArgumentParser()
+    p = ArgumentParser(description='IRI90 time profile plot')
     p.add_argument('-t','--trange',help='START STOP STEP (hours) time [UTC]',nargs=3,
                    default=('2012-08-21','2012-08-22',0.25))
     p.add_argument('--alt',help='START STOP STEP altitude [km]',type=float, nargs=3,default=(120,180,20))

@@ -326,12 +326,10 @@ C   DIP LATITUDE (MAGBR) AND MODIFIED DIP (MODIP). ALL IN DEGREE......
 C
         IF(JMAG.GT.0) THEN
            MLAT=ALATI
-           MLONG=ALONG
-           if (mlong .lt. 0.) mlong=mlong+360.
+           MLONG=modulo(ALONG, 360.)
         ELSE
            LATI=ALATI
-           LONGI=ALONG
-           if (longi .lt. 0.) longi=longi+360.
+           LONGI= modulo(ALONG, 360.)
         ENDIF
         CALL GGM(JMAG,LONGI,LATI,MLONG,MLAT)
         ABSLAT=ABS(LATI)

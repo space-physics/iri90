@@ -21,14 +21,14 @@ def datetimerange(start:datetime, end:datetime, step:timedelta) -> list:
     return [start + i*step for i in range((end-start) // step)]
 
 
-def runiri(t:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int) -> xarray.DataArray:
+def runiri(time:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:int) -> xarray.DataArray:
 
     def _collect_output() -> xarray.DataArray:
         """ collect IRI90 output into xarray.DataArray with metadata"""
         iono = xarray.DataArray(outf[:9,:].T,
                          coords={'alt_km':altkm, 'sim':simout},
                          dims=['alt_km','sim'],
-                         attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'time':t})
+                         attrs={'f107':f107, 'f107a':f107a, 'ap':ap, 'glatlon':glatlon,'time':time})
 
     #    i=(iono['Ti']<iono['Tn']).values
     #    iono.ix[i,'Ti'] = iono.ix[i,'Tn']
@@ -53,8 +53,8 @@ def runiri(t:datetime, altkm:float, glatlon:tuple, f107:float, f107a:float, ap:i
     JF = np.array((1,1,1,1,0,1,1,1,1,1,1,0),bool) #Solomon 1993 version of IRI
     #JF = (1,1,1) + (0,0,0) +(1,)*14 + (0,1,0,1,1,1,1,0,0,0,1,1,0,1,0,1,1,1) #for 2013 version of IRI
 
-    monthday = t.month*100 + t.day  # yep, that's how the IRI code wants it, NOT as character.
-    hourfrac = t.hour + t.minute/60+ t.second/3600
+    monthday = time.month*100 + time.day  # yep, that's how the IRI code wants it, NOT as character.
+    hourfrac = time.hour + time.minute/60+ time.second/3600
     datadir = str(rdir/'data')+'/'
 #%% call IRI
     outf,oarr = iri90.iri90(JF,jmag,
