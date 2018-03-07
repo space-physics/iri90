@@ -24,7 +24,7 @@ before_build:
 build_script:
 - cmd: where python
 - python --version
-- pip -q install -e .[tests]
+- sudo pip -q install -e .[tests]
   
 after_build:
 - pytest -v
