@@ -4,6 +4,9 @@
 .. image:: https://coveralls.io/repos/github/scivision/pyiri90/badge.svg?branch=master
     :target: https://coveralls.io/github/scivision/pyiri90?branch=master
 
+.. image:: https://ci.appveyor.com/api/projects/status/e36qx2h7cph5y4iq?svg=true
+    :target: https://ci.appveyor.com/project/scivision/pyiri90
+    
 
 =======
 PyIRI90
