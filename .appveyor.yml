@@ -22,6 +22,7 @@ before_build:
 - sh: sudo apt install -yq --no-install-suggests --no-install-recommends gfortran cmake make > /dev/null
 
 build_script:
+- cmd: where python
 - pip -q install -e .[tests]
   
 after_build:
