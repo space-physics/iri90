@@ -164,8 +164,9 @@ C
       integer,intent(in) :: JMAG,MMDD
       real,intent(in) :: alati,along,rz12, dhour, zkm(nz)
       real,intent(out) :: outf(11,nz),oarr(30)
+      character(*), intent(in) :: drect
 
-      character(*) drect
+
       character(256) path
       character(16) filename
       INTEGER               DAYNR,DDO,DO2,SEASON,SEADAY
@@ -1514,8 +1515,8 @@ c------------------------------------------------------------------
        SM=0.0
       endif
       RPID= n0 * SM
-      RETURN
-      END
+
+      END FUNCTION RPID
 C
 c
       SUBROUTINE RDHHE (H,HB,RDOH,RDO2H,RNO,PEHE,RDH,RDHE)
