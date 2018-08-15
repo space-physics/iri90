@@ -22,6 +22,7 @@ def main():
 # %% run IRI90 across altitude
     iono = iri90.runiri(dtime, altkm, p.latlon, p.f107, p.f107a, ap=p.ap)
 # %% altitude profile plot
+    print(iono)
     ipt.plotalt(iono)
     show()
 

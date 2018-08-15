@@ -32,6 +32,14 @@ python -m pip install -e .
 
 This IRI90 Python module is as small and clean as possible to enable your custom IRI90 applications.
 
+```sh
+impor iri90
+
+iono = iri90.runiri(dtime, altkm, p.latlon, p.f107, p.f107a, ap=p.ap)
+```
+
+which is an xarray.DataArray indexable by species, altitude, etc. and includes metadata.
+
 ### Altitude profile
 
 density and temperature:
