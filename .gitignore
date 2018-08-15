@@ -1,3 +1,5 @@
+.mypy_cache/
+.pytest_cache/
 CMakeFiles/
 CMakeCache.txt
 testiri90

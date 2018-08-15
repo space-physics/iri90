@@ -16,8 +16,7 @@ os:
 
 addons:
   apt:
-    packages:
-    - gfortran
+    packages: gfortran
 
 install: pip install -e .[tests]
 
