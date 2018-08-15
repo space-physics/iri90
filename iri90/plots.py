@@ -2,14 +2,16 @@ from matplotlib.pyplot import figure
 import xarray
 import numpy as np
 from datetime import datetime
+from typing import Sequence, List
 try:
     import ephem
 except ImportError:
-    ephem=None
+    ephem = None
 #
-Ts = ['Tn','Ti','Te']
+Ts = ['Tn', 'Ti', 'Te']
 
-def plotalt(iono:xarray.DataArray, species:tuple=None):
+
+def plotalt(iono: xarray.DataArray, species: Sequence[str]=None):
     """
     plots IRI90 altitude profile
 
@@ -22,24 +24,24 @@ def plotalt(iono:xarray.DataArray, species:tuple=None):
 
     species = _pickspecies(iono.sim, species)
 
-    fg = figure(figsize=(15,12))
-    axs = fg.subplots(1,2, sharey=True)
+    fg = figure(figsize=(15, 12))
+    axs = fg.subplots(1, 2, sharey=True)
 # %% densities
     ax = axs[0]
     for p in species:
         if p in Ts:
             continue
-        ax.semilogx(iono.loc[:,p], iono.alt_km, label=p.item())
+        ax.semilogx(iono.loc[:, p], iono.alt_km, label=p)
 
     ax.set_xlabel('density [m$^{-3}$]')
     ax.set_ylabel('altitude [km]')
-    ax.set_xlim(1e6,None)
+    ax.set_xlim(1e6, None)
     ax.legend()
     ax.grid(True)
 # %% temperature
     ax = axs[1]
     for p in Ts:
-        ax.plot(iono.loc[:,p], iono.alt_km, label=p)
+        ax.plot(iono.loc[:, p], iono.alt_km, label=p)
 
     ax.set_xlabel('Temperature [K]')
     ax.legend()
@@ -49,7 +51,7 @@ def plotalt(iono:xarray.DataArray, species:tuple=None):
     fg.suptitle(f"IRI90 {ia['glatlon']} {ia['time']}\n f10.7={ia['f107']} f107avg={ia['f107a']} Ap={ia['ap']}")
 
 
-def plottime(iono:xarray.DataArray, species:tuple=None):
+def plottime(iono: xarray.DataArray, species: Sequence[str]=None):
     """
     plots IRI90 time profile
 
@@ -62,37 +64,38 @@ def plottime(iono:xarray.DataArray, species:tuple=None):
 
     species = _pickspecies(iono.sim, species)
 
-    fg = figure(figsize=(15,8))
+    fg = figure(figsize=(15, 8))
     ax = fg.gca()
 
     for p in species:
         if p in Ts:
             continue
         for alt in iono.alt_km:
-            ax.plot(iono.time, iono.loc[:,alt,p], marker='*',label=f'{p}, {alt.item()} km')
+            ax.plot(iono.time, iono.loc[:, alt, p], marker='*', label=f'{p}, {alt.item()} km')
 
     _sunfid(ax, iono)
 
     ax.set_ylabel('density [m$^{-3}$]')
     ax.set_xlabel('time [UTC]')
-    ax.set_title(f'{np.datetime_as_string(iono.time[0])[:-13]} to {np.datetime_as_string(iono.time[-1])[:-13]}\n {iono.attrs["glatlon"]}')
+    ax.set_title(
+        f'{np.datetime_as_string(iono.time[0])[:-13]} to {np.datetime_as_string(iono.time[-1])[:-13]}\n {iono.attrs["glatlon"]}')
     ax.set_yscale('log')
     ax.legend()
     ax.grid(True)
 
 
-def _pickspecies(sim:list, species:list) -> list:
+def _pickspecies(sim: xarray.DataArray, species: Sequence[str]=None) -> List[str]:
     if not species:
-        species = [p.item() for p in sim]
-    elif isinstance(species,str):
-        species = [species]
-    else: # assuming it's an iterable
-        pass
+        specie = [p.item() for p in sim]
+    elif isinstance(species, str):
+        specie = [species]
+    elif isinstance(species, (list, tuple, np.ndarray)):
+        specie = species
 
-    return species
+    return specie
 
 
-def _sunfid(ax, iono:xarray.DataArray):
+def _sunfid(ax, iono: xarray.DataArray):
     """plot sunrise, sunset fiducials
     ephem uses UTC internally: http://rhodesmill.org/pyephem/date.html#time-zones
 
@@ -110,10 +113,9 @@ def _sunfid(ax, iono:xarray.DataArray):
     o.lon = str(iono.attrs['glatlon'][1])
     o.date = t0
 
-
     sun = ephem.Sun()
     sunrise = o.next_rising(sun).datetime()
     sunset = o.next_setting(sun).datetime()
 
-    ax.axvline(sunrise,color='gold',linestyle='--', linewidth=2, label='sunrise')
-    ax.axvline(sunset,color='red',linestyle='--', linewidth=2, label='sunset')
+    ax.axvline(sunrise, color='gold', linestyle='--', linewidth=2, label='sunrise')
+    ax.axvline(sunset, color='red', linestyle='--', linewidth=2, label='sunset')
