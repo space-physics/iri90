@@ -1,6 +1,10 @@
 [![Build Status](https://travis-ci.org/scivision/iri90.svg?branch=master)](https://travis-ci.org/scivision/iri90)
 [![Coverage Status](https://coveralls.io/repos/github/scivision/iri90/badge.svg?branch=master)](https://coveralls.io/github/scivision/iri90?branch=master)
 [![Build status](https://ci.appveyor.com/api/projects/status/4h8pm345hscdpyf7?svg=true)](https://ci.appveyor.com/project/scivision/iri90)
+[![PyPi version](https://img.shields.io/pypi/pyversions/iri90.svg)](https://pypi.python.org/pypi/iri90)
+[![PyPi formats](https://img.shields.io/pypi/format/iri90.svg)](https://pypi.python.org/pypi/iri90)
+[![PyPi Download stats](http://pepy.tech/badge/iri90)](http://pepy.tech/project/iri90)
+
 
 # IRI90: International reference ionosphere in Python
 
