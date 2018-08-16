@@ -19,6 +19,14 @@ auroral latitudes, understanding the caveats.
 
 ## Install
 
+A Fortran compiler such as `gfortran` is needed. 
+We use `f2py` (part of `numpy`) to seamlessly use Fortran libraries from Python.
+If you don't have one, here is how to install Gfortran:
+
+* Linux: `apt install gfortran`
+* Mac: `brew install gcc`
+* [Windows](https://www.scivision.co/windows-gcc-gfortran-cmake-make-install/)
+
 ```sh
 pip install iri90
 ```
@@ -26,6 +34,13 @@ or for the latest development version:
 
 ```sh
 python -m pip install -e .
+```
+
+### Windows
+If you get ImportError on Windows for the Fortran module, try from the `lowtran` directory:
+```posh
+del *.pyd
+python setup.py build_ext --inplace --compiler=mingw32
 ```
 
 ## Usage
