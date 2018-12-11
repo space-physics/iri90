@@ -143,7 +143,7 @@ C**************** ALL-IN-ONE SUBROUTINE  *************************
 C*****************************************************************
 C
 C
-       SUBROUTINE IRI_SUB(JF,JMAG,ALATI,ALONG,IYYYY,MMDD,DHOUR,
+      SUBROUTINE IRI_SUB(JF,JMAG,ALATI,ALONG,IYYYY,MMDD,DHOUR,
      &    HEIBEG,HEIEND,HEISTP,OUTF,OARR)
 C-----------------------------------------------------------------
 C
@@ -227,8 +227,8 @@ C          optional for jf(21:24); default is F10.7D=COV
 C    jf(25) =.false.     OARR(41)=user input for daily F10.7 index
 C          if oarr(41).le.0 then 12-month running mean is
 C          taken from internal file]
-C    jf(27) =.flase.     OARR(39)=user input for IG12
-C    jf(28) =.flase.     OARR(41)=user input for daily F10.7 index
+C    jf(27) =.false.     OARR(39)=user input for IG12
+C    jf(28) =.false.     OARR(41)=user input for daily F10.7 index
 C
 C
 C  OUTPUT:  OUTF(1:20,1:1000)
@@ -322,7 +322,7 @@ C*****************************************************************
       INTEGER    DAYNR,DDO,DO2,SEASON,SEADAY
       REAL       LATI,LONGI,MO2,MO,MODIP,NMF2,MAGBR,INVDIP,IAPO,
      &           NMF1,NME,NMD,MM,MLAT,MLONG,NMF2S,NMES
-      CHARACTER  FILNAM*12
+      CHARACTER(12)  FILNAM
 c-web-for webversion
 c      CHARACTER FILNAM*53
 
@@ -392,7 +392,7 @@ C
             ALOG2=ALOG(2.)
             ALG10=ALOG(10.)
             ALG100=ALOG(100.)
-            endif
+        endif
 
         numhei=int(abs(heiend-heibeg)/abs(heistp))+1
         if(numhei.gt.nummax) numhei=nummax
@@ -2051,11 +2051,11 @@ c include only every second auroral boundary point (MLT=0,1,2..23)
 
        icalls=icalls+1
 
-      RETURN
-      END
-c
-c
-        subroutine iri_web(jmag,jf,alati,along,iyyyy,mmdd,iut,dhour,
+
+      END subroutine iri_sub
+
+
+      subroutine iri_web(jmag,jf,alati,along,iyyyy,mmdd,iut,dhour,
      &          height,h_tec_max,ivar,vbeg,vend,vstp,a,b)
 c-----------------------------------------------------------------------
 c changes:

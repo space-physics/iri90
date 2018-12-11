@@ -417,56 +417,57 @@ c
                 	write(7,3314)
         		else 
                 	write(7,3315)
-                endif
-            else    
+            endif
+          else    
         		if(jf(30)) then
                 	write(7,3316)
         		else 
                 	write(7,3317)
-                endif
             endif
-                if(jf(8)) write(7,301) map
-                if(jf(9)) write(7,303)
-                write(7,3081) dopt
-                write(7,309) bopt
-                write(7,3291) sopt
-                write(7,3295) f1opt
-                numi=numstp
-                if(ivar.eq.1) numi=1
-                do j=1,6
-                  ij=jfi(j)
-                  if(.not.jf(ij)) then
-                     write(7,302) pname(j)
-                     write(7,402) (oar(j,i),i=1,numi)
-                     endif
-                  enddo
-                endif 
+          endif
+            
+          if(jf(8)) write(7,301) map
+          if(jf(9)) write(7,303)
+          write(7,3081) dopt
+          write(7,309) bopt
+          write(7,3291) sopt
+          write(7,3295) f1opt
+          numi=numstp
+          if(ivar.eq.1) numi=1
+          do j=1,6
+            ij=jfi(j)
+            if(.not.jf(ij)) then
+               write(7,302) pname(j)
+               write(7,402) (oar(j,i),i=1,numi)
+            endif
+          enddo
+        endif 
 
         if(jf(2)) write(7,3292) topt
         if(jf(3)) write(7,329) iopt
 
         if(ivar.eq.1) then
-                if(oar(3,1).lt.1.) oar(4,1)=0.
-                yp2=0
-                if(oar(3,1).gt.0.0) yp2=oar(3,1)/1.e6
-                write(7,213) oar(1,1)/1.E6,yp2,oar(5,1)/1.E6
-                write(7,214) oar(2,1),oar(4,1),oar(6,1)
+          if(oar(3,1).lt.1.) oar(4,1)=0.
+          yp2=0
+          if(oar(3,1).gt.0.0) yp2=oar(3,1)/1.e6
+          write(7,213) oar(1,1)/1.E6,yp2,oar(5,1)/1.E6
+          write(7,214) oar(2,1),oar(4,1),oar(6,1)
         else
-                write(7,307)
+          write(7,307)
         endif
 
         write(7,211) oar(23,1),oar(25,1),oar(27,1)
 
         if(.not.jf(17)) then
-                write(7,223) oar(33,1)
+          write(7,223) oar(33,1)
         else
-                write(7,212) oar(33,1)
+          write(7,212) oar(33,1)
         endif
 
         if(.not.jf(27)) then
-                write(7,2231) oar(39,1)
+          write(7,2231) oar(39,1)
         else
-                write(7,2121) oar(39,1)
+          write(7,2121) oar(39,1)
         endif
 
 
@@ -721,7 +722,6 @@ c     &        jih,jihe,jino,jio2,jicl,tec,itopp
 
 2357    print *,'Enter 0 to exit or 1 to generate another profile?' 
         read(5,*) icontinue
-        if (icontinue.gt.0) goto 1
-		    
-            stop
-            end
+        if (icontinue > 0) goto 1
+
+        end program

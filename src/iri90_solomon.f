@@ -162,9 +162,9 @@ C
        SUBROUTINE IRI90(JF,JMAG,ALATI,ALONG,RZ12,MMDD,DHOUR,
      &                  ZKM,NZ,DIRECT,OUTF,OARR)
       dimension zkm(nz), outf(11,nz), oarr(30)
-      character*(*) direct
-      character*50 path
-      character*10 filename
+      character(*) direct
+      character(50) path
+      character(10) filename
       INTEGER 		EGNR,AGNR,DAYNR,DDO,DO2,SEASON,SEADAY
       REAL 		LATI,LONGI,MO2,MO,MODIP,NMF2,MAGBR
       REAL  		NMF1,NME,NMD,NEI,MM,MLAT,MLONG,NOBO2

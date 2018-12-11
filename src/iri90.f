@@ -429,8 +429,8 @@ C
         MONTHO=MONTH
        GOTO 4291
 
-8448       write(error_unit,8449) trim(path)
-8449       format('IRI90: File ',A,' not found')
+8448  write(error_unit,*) 'IRI90: File ' ,trim(path),
+     &   'not found'
 ! must be "error stop" so Travis-CI tests, etc. fail when this fails.
        error stop
 C
@@ -956,7 +956,9 @@ C
       IF((HEIGHT.GT.HNIE).OR.(HEIGHT.LT.HNIA)) GOTO 7118
        if(DY) then
       zmonth = month + iday / 30.0
+
       call IONCOM(HEIGHT,XHI*UMR,LATI*UMR,COV,ZMONTH,DION)
+
       ROX=DION(1)
       RHX=DION(2)
       RNX=DION(3)
@@ -2343,7 +2345,7 @@ C -------------------------------------------------------------- STEP
        END
 C
 C
-       REAL FUNCTION EPSTEP ( Y2, Y1, SC, HX, X)
+       REAL FUNCTION EPSTEP( Y2, Y1, SC, HX, X)
        Implicit None
        Real, Intent(In) :: Y2,Y1,SC,HX,X
        Real,External :: EpsT
@@ -2367,10 +2369,10 @@ C ------------------------------------------------------------ PEAK
        D2 = 1. + D0
        EPLA = D0 / ( D2 * D2 )
 
-       END FUNCTION EPLA
-c
-c
-       FUNCTION XE2TO5(H,HMF2,NL,HX,SC,AMP)
+      END FUNCTION EPLA
+
+
+      real FUNCTION XE2TO5(H,HMF2,NL,HX,SC,AMP)
 C----------------------------------------------------------------------
 C NORMALIZED ELECTRON DENSITY (N/NMF2) FOR THE MIDDLE IONOSPHERE FROM
 C HME TO HMF2 USING LAY-FUNCTIONS.
@@ -2382,11 +2384,11 @@ C----------------------------------------------------------------------
           zlay=10.**ylay
 1          sum=sum*zlay
        XE2TO5 = sum
-       RETURN
-       END
+ 
+      END FUNCTION XE2TO5
 C
 C
-       REAL FUNCTION XEN(H,HMF2,XNMF2,HME,NL,HX,SC,AMP)
+      REAL FUNCTION XEN(H,HMF2,XNMF2,HME,NL,HX,SC,AMP)
 C----------------------------------------------------------------------
 C ELECTRON DENSITY WITH NEW MIDDLE IONOSPHERE
 C----------------------------------------------------------------------
@@ -2399,11 +2401,11 @@ C
               XEN = XNMF2 * XE2TO5(H,HMF2,NL,HX,SC,AMP)
               RETURN
 200       XEN = XE6(H)
-       RETURN
-       END
-C
-C
-       SUBROUTINE VALGUL(XHI,HVB,VWU,VWA,VDP)
+
+      END FUNCTION XEN
+
+
+      SUBROUTINE VALGUL(XHI,HVB,VWU,VWA,VDP)
 C ---------------------------------------------------------------------
 C   CALCULATES E-F VALLEY PARAMETERS; T.L. GULYAEVA, ADVANCES IN
 C   SPACE RESEARCH 7, #6, 39-48, 1987.
@@ -2453,10 +2455,10 @@ C
        GRO = 0.8 - 0.2 / ( 1. + EXP(XS) )
 c same as gro=0.6+0.2/(1+exp(-xs))
 
-       END Subroutine Rogul
-C
-C
-       SUBROUTINE LNGLSN ( N, A, B, AUS)
+      END Subroutine Rogul
+
+
+      SUBROUTINE LNGLSN ( N, A, B, AUS)
 C --------------------------------------------------------------------
 C SOLVES QUADRATIC SYSTEM OF LINEAR EQUATIONS:
 C
@@ -2521,10 +2523,10 @@ C
               ENDIF
 6       CONTINUE
 
-       END SUBROUTINE LNGLSN
+      END SUBROUTINE LNGLSN
 
 
-       SUBROUTINE LSKNM ( N, M, M0, M1, HM, SC, HX, W, X, Y, VAR, SING)
+      SUBROUTINE LSKNM( N, M, M0, M1, HM, SC, HX, W, X, Y, VAR, SING)
 C --------------------------------------------------------------------
 C   DETERMINES LAY-FUNCTIONS AMPLITUDES FOR A NUMBER OF CONSTRAINTS:
 C
@@ -2572,9 +2574,9 @@ C
        IF (.NOT.SING) THEN
               DO 8 I=1,N
 8                     VAR(I) = ALI(N,I)
-              ENDIF
-       RETURN
-       END
+      ENDIF
+
+      END SUBROUTINE LSKNM
 C
 C
        SUBROUTINE INILAY(NIGHT,XNMF2,XNMF1,XNME,VNE,HMF2,HMF1,
@@ -2721,13 +2723,13 @@ C
               GOTO 2299
               ENDIF
 1937           IF(SSIN) IQUAL=2
-           RETURN
-           END
-c
-c
-       subroutine ioncom(h,z,f,fs,t,cn)
 
-       integer,intent(in) :: t
+      END subroutine inilay
+
+
+      subroutine ioncom(h,z,f,fs,t,cn)
+
+      real,intent(in) :: t
 c---------------------------------------------------------------
 c ion composition model
 c A.D. Danilov and A.P. Yaichnikov, A New Model of the Ion
@@ -2788,7 +2790,7 @@ c
          do 7 j=1,6
               var(j) = p(1,j,i)*cos(z) + p(2,j,i)*cos(f) +
      &                 p(3,j,i)*cos(0.013*(300.-fs)) +
-     &                      p(4,j,i)*cos(0.52*(real(t)-6.)) + p(5,j,i)
+     &                      p(4,j,i)*cos(0.52*(t-6.)) + p(5,j,i)
 7         continue
          cm(i)  = var(1)
          hm(i)  = var(2)
@@ -2809,7 +2811,7 @@ c
          s=s+cn(i)
 5       continue
        do 6 i=1,7
-6              cn(i)=cn(i)/s*100.
+6        cn(i)=cn(i)/s*100.
 
        end subroutine ioncom
 C
@@ -2993,7 +2995,7 @@ C--------------------------------------------------------------------
       pure real FUNCTION DTNDH(H,TLBD,S)
       implicit None
 
-      Real,Intent(In) :: h,tlbd,s
+      Real,Intent(in) :: h,tlbd,s
 
       Real zg1,zg2,zg3
 C---------------------------------------------------------------------
