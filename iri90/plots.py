@@ -11,7 +11,7 @@ except ImportError:
 Ts = ['Tn', 'Ti', 'Te']
 
 
-def plotalt(iono: xarray.DataArray, species: Sequence[str]=None):
+def plotalt(iono: xarray.DataArray, species: Sequence[str] = None):
     """
     plots IRI90 altitude profile
 
@@ -51,7 +51,7 @@ def plotalt(iono: xarray.DataArray, species: Sequence[str]=None):
     fg.suptitle(f"IRI90 {ia['glatlon']} {ia['time']}\n f10.7={ia['f107']} f107avg={ia['f107a']} Ap={ia['ap']}")
 
 
-def plottime(iono: xarray.DataArray, species: Sequence[str]=None):
+def plottime(iono: xarray.DataArray, species: Sequence[str] = None):
     """
     plots IRI90 time profile
 
@@ -84,7 +84,7 @@ def plottime(iono: xarray.DataArray, species: Sequence[str]=None):
     ax.grid(True)
 
 
-def _pickspecies(sim: xarray.DataArray, species: Sequence[str]=None) -> List[str]:
+def _pickspecies(sim: xarray.DataArray, species: Sequence[str] = None) -> List[str]:
     if not species:
         specie = [p.item() for p in sim]
     elif isinstance(species, str):
