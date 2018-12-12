@@ -52,7 +52,8 @@ def runiri(time: datetime, altkm: float, glatlon: tuple, f107: float, f107a: flo
     glat, glon = glatlon
     jmag = 0  # coordinates are: 0:geographic 1: magnetic
 
-    JF = np.array((1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0), bool)  # Solomon 1993 version of IRI
+    JF = np.array((1, 1, 1, 1, 0, 1, 
+                   1, 1, 1, 1, 1, 1), bool)  # Solomon 1993 version of IRI
     # JF = (1,1,1) + (0,0,0) +(1,)*14 + (0,1,0,1,1,1,1,0,0,0,1,1,0,1,0,1,1,1) #for 2013 version of IRI
 
     monthday = time.month*100 + time.day  # yep, that's how the IRI code wants it, NOT as character.

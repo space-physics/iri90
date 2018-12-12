@@ -21,7 +21,8 @@ character(*), parameter :: datadir = BIN_DIR // '/../iri90/data/'
 
 
 jf = .true.
-jf(4:6) = .false.
+jf(5) = .false.
+jf(12) = .true.
 
 ! --- command line input
 argc = command_argument_count()
