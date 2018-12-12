@@ -20,20 +20,6 @@ integer :: i, argc
 character(*), parameter :: datadir = BIN_DIR // '/../iri90/data/'
 
 
-! --- per irisub.for docs
-integer :: icalls, nmono, iyearo, idaynro
-logical :: rzino, igino 
-real :: ut0
-
-COMMON/const2/icalls,nmono,iyearo,idaynro,rzino,igino,ut0
-icalls=0
-nmono=-1
-iyearo=-1
-idaynro=-1
-rzino=.true.
-igino=.true.
-ut0=-1
-
 jf = .true.
 jf(4:6) = .false.
 
