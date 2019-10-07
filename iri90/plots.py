@@ -90,7 +90,7 @@ def _pickspecies(sim: xarray.DataArray, species: Sequence[str] = None) -> List[s
     elif isinstance(species, str):
         specie = [species]
     elif isinstance(species, (list, tuple, np.ndarray)):
-        specie = species
+        specie = species  # type: ignore
 
     return specie
 

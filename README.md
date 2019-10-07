@@ -23,7 +23,7 @@ If you don't have one, here is how to install Gfortran:
 
 * Linux: `apt install gfortran`
 * Mac: `brew install gcc`
-* [Windows](https://www.scivision.dev/windows-gcc-gfortran-cmake-make-install/)
+* [Windows](https://www.scivision.dev/windows-gcc-gfortran-cmake-make-install/) using Windows PowerShell:
 
    ```posh
    echo "[build]`ncompiler=mingw32" | Out-File -Encoding ASCII ~/pydistutils.cfg
