@@ -14,6 +14,4 @@ add_subdirectory(src)
 add_executable(testiri90 src/iritest.for)
 target_link_libraries(testiri90 iri90)
 
-add_executable(iri90_driver src/iri90.f src/iri90_driver.F90)
-target_compile_definitions(iri90_driver PRIVATE
-  BIN_DIR='${CMAKE_CURRENT_BINARY_DIR}')
+add_executable(iri90_driver src/iri90.f src/iri90_driver.f90)

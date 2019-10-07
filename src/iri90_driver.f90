@@ -1,4 +1,3 @@
-program basictest
 use, intrinsic:: iso_fortran_env, only: stderr=>error_unit, stdout=>output_unit
 implicit none
 
@@ -14,10 +13,7 @@ real, allocatable :: altkm(:), outf(:,:)
 character(80) :: argv
 integer :: i, argc
 
-#ifndef BIN_DIR
-#define BIN_DIR '.'
-#endif
-character(*), parameter :: datadir = BIN_DIR // '/../iri90/data/'
+character(:), allocatable :: datadir
 
 
 jf = .true.
@@ -45,10 +41,13 @@ read(argv,*) glon
 call get_command_argument(9, argv)
 read(argv,*) f107a
 
-Nalt = argc-9
+call get_command_argument(10, argv)
+datadir = trim(argv)
+
+Nalt = argc-10
 allocate(altkm(Nalt), outf(11,Nalt))
 do i = 1,Nalt
-  call get_command_argument(9+i, argv)
+  call get_command_argument(10+i, argv)
   read(argv,*) altkm(i)
 enddo
 
@@ -72,9 +71,7 @@ do i = 1,Nalt
   write(stdout, '(F10.3, 11ES16.8)') altkm(i), outf(:11,i)
 enddo
 
-print *,new_line(' ')
 
-write(stdout, '(100ES16.8)') oarr
+write(stdout, '(/,100ES16.8)') oarr
 
 end program
-
