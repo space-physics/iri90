@@ -3,7 +3,8 @@ import pytest
 import numpy as np
 from pytest import approx
 from datetime import datetime
-from iri90 import runiri
+
+import iri90
 
 
 def test_altitude():
@@ -13,7 +14,7 @@ def test_altitude():
     f107 = f107a = 200.
     ap = 4.
 
-    iono = runiri(dtime, altkm, latlon, f107, f107a, ap)
+    iono = iri90.runiri(dtime, altkm, latlon, f107, f107a, ap)
 
     Isim = iono.loc[235, :]
     It = [2.12232176e+11, 1.13743994e+03, 1.13743994e+03,
@@ -23,4 +24,4 @@ def test_altitude():
 
 
 if __name__ == '__main__':
-    pytest.main(['-x', __file__])
+    pytest.main(['-v', __file__])
