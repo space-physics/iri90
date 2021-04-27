@@ -25,21 +25,21 @@ jobs:
     - run: mypy
     - run: pytest
 
-  macos:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+  # macos:
+  #   runs-on: macos-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/setup-python@v2
+  #     with:
+  #       python-version: '3.x'
 
-    - run: brew install ninja
+  #   - run: brew install ninja
 
-    - run: pip install -e .[tests]
-      env:
-        FC: gfortran-10
+  #   - run: pip install -e .[tests]
+  #     env:
+  #       FC: gfortran-10
 
-    - run: pytest
+  #   - run: pytest
 
   # windows:
   #   runs-on: windows-latest
